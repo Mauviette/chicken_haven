@@ -16,16 +16,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Tous les champs sont requis.";
     }
 
+    // Vérifie que l'username ne contient que des lettres, chiffres, _
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+        $errors[] = "Caractères interdits dans l'identifiant.";
+    }
+
+    // Vérifie que le mot de passe ne contient que des lettres, chiffres, _
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $password)) {
+        $errors[] = "Caractères interdits dans le mot de passe.";
+    }
+
     // Vérifie que les mots de passe correspondent
     if ($password !== $password_confirm) {
         $errors[] = "Les mots de passe ne correspondent pas.";
     }
 
+    // Vérifie que l'identifiant fait de 4 à 20 caractères
+    if (strlen($username) < 4 || strlen($username) > 20) {
+        $errors[] = "L'identifiant doit faire entre 4 et 20 caractères.";
+    }
+
+    // Vérifie que le mot de passe fait de 4 à 20 caractères
+    if (strlen($password) < 4 || strlen($password) > 20) {
+        $errors[] = "Le mot de passe doit faire entre 4 et 20 caractères.";
+    }
+
+
     // Vérifie la disponibilité du username
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
     $stmt->execute([$username]);
     if ($stmt->rowCount() > 0) {
-        $errors[] = "Ce nom d'utilisateur est déjà pris.";
+        $errors[] = "Cet identifiant est déjà pris.";
     }
 
     // Si aucune erreur, insère l'utilisateur dans la base de données
@@ -41,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -48,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Chicken Haven</title>
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="icon" href="../game/images/login.png" type="image/x-icon">
 </head>
 <body>
     <div class="form-container">

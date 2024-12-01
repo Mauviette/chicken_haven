@@ -10,13 +10,16 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Haven</title>
+    <title>Connexion - Chicken Haven</title>
     <link rel="stylesheet" href="css/login.css">
+    <link rel="icon" href="game/images/login.png" type="image/x-icon">
+
 </head>
 <body>
     <div class="form-container">
         <?php if (!isset($_SESSION['username'])): ?>
             <h1>Bienvenue sur Chicken Haven</h1>
+            <p>0 joueurs en ligne</p>
 
             <?php if (isset($_GET['error'])): ?>
                 <p class="error">
@@ -42,11 +45,10 @@ session_start();
                 <button type="submit">Se connecter</button>
             </form>
             <a href="connexion/register_page.php">S'inscrire</a>
-        <?php else: ?>
-            <h1>Bienvenue, <?= htmlspecialchars($_SESSION['username']); ?> !</h1>
-            <a href="game/main/main.php">Accéder au jeu</a>
-            <a href="scripts/logout.php">Se déconnecter</a>
-        <?php endif; ?>
+            <br><br>
+        <?php else: 
+            header("Location: game/main.php"); 
+        endif; ?>
     </div>
 </body>
 </html>
