@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../scripts/db_connect.php'; // Connexion à la base de données
+require_once '../database/db_connect.php'; // Connexion à la base de données
 
 // Vérifie si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,6 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Les mots de passe ne correspondent pas.";
     }
 
+    // Vérifie que le nom d'affichage fait de 4 à 20 caractères
+    if (strlen($displayname) < 1 || strlen($displayname) > 30) {
+        $errors[] = "Le nom d'affichage doit faire entre 1 et 30 caractères.";
+    }
+
     // Vérifie que l'identifiant fait de 4 à 20 caractères
     if (strlen($username) < 4 || strlen($username) > 20) {
         $errors[] = "L'identifiant doit faire entre 4 et 20 caractères.";
@@ -41,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Le mot de passe doit faire entre 4 et 20 caractères.";
     }
 
-
     // Vérifie la disponibilité du username
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
     $stmt->execute([$username]);
@@ -49,14 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Cet identifiant est déjà pris.";
     }
 
+    
     // Si aucune erreur, insère l'utilisateur dans la base de données
     if (empty($errors)) {
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $stmt = $pdo->prepare("INSERT INTO users (username, displayname, password) VALUES (?, ?, ?)");
         $stmt->execute([$username, $displayname, $hashed_password]);
 
-        // Redirige vers index.php avec un message de succès
-        header("Location: ../index.php?register_success=1");
+        // Redirige vers index avec un message de succès
+        header("Location: index?register_success=1");
         exit();
     }
 }
@@ -70,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Chicken Haven</title>
-    <link rel="stylesheet" href="../css/login.css">
-    <link rel="icon" href="../game/images/login.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">    
+    <link rel="icon" href="/chicken_haven/resources/images/login.png" type="image/x-icon">
 </head>
 <body>
     <div class="form-container">
@@ -102,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">S'inscrire</button>
         </form>
-        <p><a href="../index.php">Retour à la connexion</a></p>
+        <p><a href="../index">Retour à la connexion</a></p>
     </div>
 </body>
 </html>

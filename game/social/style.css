@@ -74,8 +74,7 @@ a:hover {
 }
 
 body {
-    background-image: url('game_bg.jpg');
-    background-size: repeat;
+    background-image: url('../../resources/images/background/login_bg.jpg');
     background-position: center;
     background-attachment: fixed;
     background-size:13%;

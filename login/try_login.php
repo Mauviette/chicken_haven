@@ -1,7 +1,7 @@
 <?php
 session_start(); // Démarre la session
 
-require_once '../scripts/db_connect.php'; // Connexion à la base de données
+require_once '../database/db_connect.php'; // Connexion à la base de données
 
 // Vérifie que le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,20 +19,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['username'] = $user['username']; // Stocke le nom d'utilisateur en session
             $_SESSION['displayname'] = $user['displayname']; // Stocke le nom affiché (si nécessaire)
             
-            header("Location: ../game/main.php"); // Redirige vers le jeu
+            header("Location: ../game/main/index"); // Redirige vers le jeu
             exit();
         } else {
             // Si les identifiants sont incorrects
-            header("Location: ../index.php?error=1");
+            header("Location: index?error=1");
             exit();
         }
     } else {
         // Si les champs sont vides
-        header("Location: ../index.php?error=2");
+        header("Location: index?error=2");
         exit();
     }
 } else {
     // Si l'accès à ce fichier se fait sans soumettre de formulaire
-    header("Location: ../index.php");
+    header("Location: index");
     exit();
 }
