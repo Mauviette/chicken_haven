@@ -8,7 +8,7 @@ CREATE TABLE users (
     displayname VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    profile_icon_id INT,
+    profile_icon_id INT
 );
 
 CREATE TABLE scores (
