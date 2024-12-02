@@ -18,13 +18,13 @@ p {
 
 
 /* Formulaires */
-form {
-    width: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
+form:not(.no-display) {
+  width: 300px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 input[type="text"], input[type="password"], input[type="submit"] {
@@ -152,3 +152,49 @@ body {
     text-decoration: underline;
   }
   
+
+
+
+.friends-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.friends-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.player-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.accept-button, .reject-button {
+    width: 20px;
+    height: 20px;
+    border: none;
+    cursor: pointer;
+    background-size: cover;
+    background-color: transparent;
+    margin-left: 5px;
+}
+
+.accept-button {
+    background-image: url('/chicken_haven/resources/images/accept.png');   
+}
+
+.reject-button {
+    background-image: url('/chicken_haven/resources/images/reject.png');
+}

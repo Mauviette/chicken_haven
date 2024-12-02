@@ -63,7 +63,7 @@ $displayname = $_SESSION['displayname'];
                 <form id="editDisplayNameForm" action="update_displayname" method="post">
                     <label for="newDisplayName">Nouveau nom d'affichage:</label>
                     <input type="text" id="newDisplayName" name="newDisplayName" required>
-                    <button type="submit">Enregistrer</button>
+                    <button type="submit">Enregistrer</button> 
                 </form>
             </div>
         </div>
