@@ -6,8 +6,11 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+require_once '../profile_picture.php'; // Connexion à la base de données
+
 $username = $_SESSION['username'];
 $displayname = $_SESSION['displayname'];
+
 // Exemple de récupération :
 //$email = "user@example.com";
 //$date_inscription = "2024-01-01";
@@ -127,7 +130,7 @@ $displayname = $_SESSION['displayname'];
         </style>
 
 
-        <img src="/chicken_haven/resources/images/player_icon.png" alt="Profil" class="profile-icon-big">
+        <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Profil" class="profile-icon-big">
         <br><br>
         
         

@@ -18,6 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Si l'utilisateur existe et le mot de passe est correct
             $_SESSION['username'] = $user['username']; // Stocke le nom d'utilisateur en session
             $_SESSION['displayname'] = $user['displayname']; // Stocke le nom affiché (si nécessaire)
+            $_SESSION['user_id'] = $user['id']; // Stocke l'ID de l'utilisateur en session
+
+            //Vérifier si l'utilisateur a un score
+            $stmt = $pdo->prepare("SELECT * FROM scores WHERE user_id = ?");
+            $stmt->execute([$user['id']]);
+            $score = $stmt->fetch();
+
+            if (!$score) {
+                // Si l'utilisateur n'a pas de score, on lui en crée un
+                $stmt = $pdo->prepare("INSERT INTO scores (user_id) VALUES (?)");
+                $stmt->execute([$user['id']]);
+            }
             
             header("Location: ../game/main/index"); // Redirige vers le jeu
             exit();

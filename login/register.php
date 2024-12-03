@@ -60,6 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO users (username, displayname, password) VALUES (?, ?, ?)");
         $stmt->execute([$username, $displayname, $hashed_password]);
 
+
+
         // Redirige vers index avec un message de succès
         header("Location: index?register_success=1");
         exit();

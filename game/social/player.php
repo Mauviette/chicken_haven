@@ -14,6 +14,7 @@ if ($username == $_SESSION['username']) {
 }
 
 require_once '../../database/db_connect.php'; // Connexion à la base de données via PDO
+require_once '../profile_picture.php'; // Connexion à la base de données via PDO
 
 $stmt = $pdo->prepare('SELECT id, displayname FROM users WHERE username = :username');
 $stmt->execute(['username' => $username]);
@@ -43,7 +44,7 @@ if ($user) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de <?php echo htmlspecialchars($username); ?> - Chicken Haven</title>    
     <link rel="stylesheet" href="player_profile.css">
-    <link rel="icon" href="images/game.png" type="image/x-icon">
+    <link rel="icon" href="<?php echo htmlspecialchars(getProfilePicture($targetUserId))?>" type="image/x-icon">
 </head>
 <body>
 
@@ -52,7 +53,7 @@ if ($user) {
     <div class="form-container">
         <h1>Profil de <?php echo htmlspecialchars($displayname); ?></h1>
         <p><strong><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
-        <img src="/chicken_haven/resources/images/player_icon.png" alt="Profil" class="profile-icon-big">
+        <img src="<?php echo getProfilePicture($targetUserId);?>" alt="Profil" class="profile-icon-big">
         <br><br>
 
         <?php if (!$relation): ?>

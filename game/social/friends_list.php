@@ -7,6 +7,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 require_once '../../database/db_connect.php';
+require_once '../profile_picture.php';
 
 // Récupérer l'ID de l'utilisateur connecté
 $stmt = $pdo->prepare('SELECT id FROM users WHERE username = :username');
@@ -33,6 +34,7 @@ $friendsStmt = $pdo->prepare('
 $friendsStmt->execute(['currentUser' => $currentUserId]);
 $friends = $friendsStmt->fetchAll();
 
+
 ?>
 
 <!DOCTYPE html>
@@ -56,18 +58,20 @@ $friends = $friendsStmt->fetchAll();
         <?php if (!empty($pendingRequests)): ?>
             <ul class="friends-list">
                 <?php foreach ($pendingRequests as $request): ?>
+                    <a href="player?username=<?php echo htmlspecialchars($request['username']);?>">
                     <li>
-                        <img src="/chicken_haven/resources/images/player_icon.png" alt="Icone joueur" class="player-icon">
-                        <strong><?php echo htmlspecialchars($request['displayname']); ?></strong> (@<?php echo htmlspecialchars($request['username']); ?>)
-                        <form action="requests/accept_friend.php" method="post" class="inline-form" class="no-display">
+                        <img src="<?php echo getProfilePicture($request['id']);?>" alt="Icone joueur" class="player-icon">
+                        <strong style="margin : 10px;"><?php echo htmlspecialchars($request['displayname']); ?></strong> @<?php echo htmlspecialchars($request['username']); ?>
+                        <form action="requests/accept_friend.php" method="post" class="no-display" style="display: inline;">
                             <input type="hidden" name="friend_id" value="<?php echo $request['id']; ?>">
                             <button type="submit" class="accept-button" title="Accepter la demande"></button>
                         </form>
-                        <form action="requests/reject_friend.php" method="post" class="inline-form" class="no-display">
+                        <form action="requests/reject_friend.php" method="post" class="no-display" style="display: inline;">
                             <input type="hidden" name="friend_id" value="<?php echo $request['id']; ?>">
                             <button type="submit" class="reject-button" title="Refuser la demande"></button>
                         </form>
                     </li>
+                </a>
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
@@ -79,10 +83,13 @@ $friends = $friendsStmt->fetchAll();
         <?php if (!empty($friends)): ?>
             <ul class="friends-list">
                 <?php foreach ($friends as $friend): ?>
+                    <a href="player?username=<?php echo htmlspecialchars($friend['username']);?>" style="no-link">
                     <li>
-                        <img src="/chicken_haven/resources/images/player_icon.png" alt="Icone joueur" class="player-icon">
-                        <strong><?php echo htmlspecialchars($friend['displayname']); ?></strong> (@<?php echo htmlspecialchars($friend['username']); ?>)
+                            <img src="<?php echo getProfilePicture($friend['id']);?>" alt="Icone joueur" class="player-icon">
+                        <strong><?php echo htmlspecialchars($friend['displayname']); ?></strong> @<?php echo htmlspecialchars($friend['username']); ?>
                     </li>
+                    </a>
+
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
@@ -91,3 +98,8 @@ $friends = $friendsStmt->fetchAll();
     </div>
 </body>
 </html>
+
+
+
+
+
