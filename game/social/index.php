@@ -24,7 +24,7 @@ $stmt = $pdo->prepare('
     FROM users u 
     JOIN scores s ON u.id = s.user_id 
     ORDER BY s.eggs DESC 
-    LIMIT 10
+    LIMIT 3
 ');
 $stmt->execute();
 $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -71,25 +71,49 @@ $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
 
 
-        <div style ="  width: 300px;
+        <div style ="  width: 400px;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #fff;">
-        <h2>Podium ALL-TIME</h2>
+        <h2>Podium</h2>
         <?php if (!empty($best_players)): ?>
-            <ul class="friends-list">
+            <ul class="friends-list" style="justify-content: space-between;">
+                <?php $playerOnLeaderBoard = false; ?>
                 <?php foreach ($best_players as $player): ?>
-                    <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
-                        <li>
-                        <p><?php echo htmlspecialchars($player['eggs']) ?> oeufs</p>
-                        <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
-                        <strong><?php echo htmlspecialchars($player['displayname']); ?></strong>
-                        </li>
-                    </a>
-
+                    <?php if  ($player['id'] == $currentUserId): ?>
+                        <?php $playerOnLeaderBoard = true; ?>
+                        <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
+                            <li style="background-color: #ccc;">
+                            <p style="flex: 1;"><?php echo htmlspecialchars($player['eggs']) ?> oeufs</p>
+                            <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                            <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                            </li>
+                        </a>
+                    <?php else: ?>
+                        <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
+                            <li>
+                            <p style="flex: 1;"><?php echo htmlspecialchars($player['eggs']) ?> oeufs</p>
+                            <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                            <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                            </li>
+                        </a>
+                    <?php endif; ?>
                 <?php endforeach; ?>
+                <?php if (!$playerOnLeaderBoard) {?>
+                    <?php $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
+                    $stmt->execute(['user_id' => $currentUserId]);
+                    $eggs = $stmt->fetchColumn();
+                    ?>
+                        <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
+                            <li style="background-color: #ccc;">
+                            <p style="flex: 1;"><?php echo htmlspecialchars($eggs) ?> oeufs</p>
+                            <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
+                            <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
+                            </li>
+                        </a>
+                <?php } ?>
             </ul>
         <?php else: ?>
             <p>Pourquoi c'est aussi vide!?</p>

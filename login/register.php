@@ -4,7 +4,7 @@ require_once '../database/db_connect.php'; // Connexion à la base de données
 
 // Vérifie si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
+    $username = strtolower(trim($_POST['username']));
     $displayname = trim($_POST['displayname']);
     $password = $_POST['password'];
     $password_confirm = $_POST['password_confirm'];

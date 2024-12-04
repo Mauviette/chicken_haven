@@ -20,7 +20,7 @@ echo '<!-- Barre de navigation -->
     </div>
 
     <!-- Barre latérale -->
-    <div class="sidebar">
+    <div class="sidebar" style="display: flex; justify-content: center;">
     <ul>
         <li><a href="/chicken_haven/game/main/index">Accueil</a></li>
         <li><a href="/chicken_haven/game/hatchery/index">Couvoir</a></li>

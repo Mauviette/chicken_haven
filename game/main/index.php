@@ -56,6 +56,32 @@ $currentScore = $stmt->fetchColumn();
     .egg.bounce {
         animation: bounce 0.25s ease-in-out;
     }
+
+    @keyframes fall {
+        0% {
+            transform: translate(0, 0) rotate(var(--start-rotation));
+            opacity: 1;
+        }
+        30% {
+            transform: translate(calc(var(--random-x) * 30px), -30px) rotate(calc(var(--start-rotation) + 45deg));
+        }
+        100% {
+            transform: translate(calc(var(--random-x) * 100px), 200px) rotate(calc(var(--start-rotation) + 360deg));
+            opacity: 0;
+        }
+    }
+
+    .egg-fragment {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: url('/chicken_haven/resources/images/egg_fragment.png') no-repeat center center;
+        background-size: cover;
+        pointer-events: none; /* Empêche les fragments d'intercepter les clics */
+        animation: fall 2s ease-out forwards;
+    }
+
+
     </style>
 </head>
 <body>
@@ -77,34 +103,58 @@ $currentScore = $stmt->fetchColumn();
 
     <!-- Javascript -->
     <script>
-    document.getElementById('egg').addEventListener('click', function() {
-        const egg = document.getElementById('egg');
+    document.getElementById('egg').addEventListener('click', function(event) {
+    const egg = document.getElementById('egg');
 
-        // Ajouter la classe pour l'animation
-        egg.classList.add('bounce');
+    // Ajouter la classe d'animation pour l'œuf
+    egg.classList.add('bounce');
 
-        // Envoyer la requête pour mettre à jour le score
-        fetch('update_score.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ increment: 1 })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('score').textContent = data.newScore + ' œufs';
-            } else {
-                alert('Erreur lors de la mise à jour du score.');
-            }
+    // Créer un fragment d'œuf
+    const fragment = document.createElement('div');
+    fragment.classList.add('egg-fragment');
 
-            // Retirer la classe d'animation une fois terminée
-            setTimeout(() => {
-                egg.classList.remove('bounce');
-            }, 250); // Durée de l'animation (doit correspondre à la durée définie en CSS)
-        });
+    // Générer une direction aléatoire pour le fragment
+    const randomX = Math.random() * 2 - 1; // Valeur aléatoire entre -1 et 1
+    const randomRotation = Math.floor(Math.random() * 360) + 'deg'; // Rotation initiale aléatoire
+
+    // Appliquer les variables CSS personnalisées
+    fragment.style.setProperty('--random-x', randomX);
+    fragment.style.setProperty('--start-rotation', randomRotation);
+
+    // Positionner le fragment à l'endroit du clic
+    fragment.style.left = event.clientX + 'px';
+    fragment.style.top = event.clientY + 'px';
+
+    // Ajouter le fragment au body
+    document.body.appendChild(fragment);
+
+    // Retirer la classe bounce après l'animation
+    setTimeout(() => {
+        egg.classList.remove('bounce');
+    }, 250);
+
+    // Supprimer le fragment après la fin de l'animation
+    fragment.addEventListener('animationend', () => {
+        fragment.remove();
     });
+
+    // Mettre à jour le score via une requête fetch
+    fetch('update_score.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ increment: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('score').textContent = data.newScore + ' œufs';
+        } else {
+            alert('Erreur lors de la mise à jour du score.');
+        }
+    });
+});
 </script>
 
 </body>
