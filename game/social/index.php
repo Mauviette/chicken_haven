@@ -24,11 +24,21 @@ $stmt = $pdo->prepare('
     FROM users u 
     JOIN scores s ON u.id = s.user_id 
     ORDER BY s.eggs DESC 
-    LIMIT 3
+    LIMIT 5
 ');
 $stmt->execute();
 $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Récupérer les meilleurs joueurs des dernières 24h
+$stmt = $pdo->prepare('
+    SELECT u.username, u.displayname, u.id, s.eggs_last_day
+    FROM users u 
+    JOIN scores s ON u.id = s.user_id 
+    ORDER BY s.eggs_last_day DESC 
+    LIMIT 5
+');
+$stmt->execute();
+$best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +96,7 @@ $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php $playerOnLeaderBoard = true; ?>
                         <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
                             <li style="background-color: #ccc;">
-                            <p style="flex: 1;"><?php echo htmlspecialchars($player['eggs']) ?> oeufs</p>
+                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                             </li>
@@ -94,7 +104,7 @@ $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php else: ?>
                         <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
                             <li>
-                            <p style="flex: 1;"><?php echo htmlspecialchars($player['eggs']) ?> oeufs</p>
+                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                             </li>
@@ -108,7 +118,7 @@ $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
                         <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
                             <li style="background-color: #ccc;">
-                            <p style="flex: 1;"><?php echo htmlspecialchars($eggs) ?> oeufs</p>
+                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs)) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
                             </li>
@@ -120,6 +130,59 @@ $best_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
         </div>
 
+
+        <div style ="  width: 400px;
+                        margin: 20px auto;
+                        padding: 20px;
+                        border: 1px solid #ccc;
+                        border-radius: 10px;
+                        background-color: #fff;">
+        <h2>Podium (dernières 24 heures)</h2>
+        <?php if (!empty($best_players_last_day)): ?>
+            <ul class="friends-list" style="justify-content: space-between;">
+                <?php $playerOnLeaderBoard = false; ?>
+                <?php foreach ($best_players_last_day as $player): ?>
+                    <?php if  ($player['id'] == $currentUserId): ?>
+                        <?php $stmt = $pdo->prepare('SELECT eggs_last_day FROM scores WHERE user_id = :user_id');
+                        $stmt->execute(['user_id' => $currentUserId]);
+                        $eggs_last_day = $stmt->fetchColumn();
+                        ?>
+                        <?php $playerOnLeaderBoard = true; ?>
+                        <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
+                            <li style="background-color: #ccc;">
+                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
+                            <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                            <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                            </li>
+                        </a>
+                    <?php else: ?>
+                        <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
+                            <li>
+                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
+                            <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                            <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                            </li>
+                        </a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <?php if (!$playerOnLeaderBoard) {?>
+                    <?php $stmt = $pdo->prepare('SELECT eggs_last_day FROM scores WHERE user_id = :user_id');
+                    $stmt->execute(['user_id' => $currentUserId]);
+                    $eggs_last_day = $stmt->fetchColumn();
+                    ?>
+                        <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
+                            <li style="background-color: #ccc;">
+                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs_last_day)) ?> oeufs</p>
+                            <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
+                            <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
+                            </li>
+                        </a>
+                <?php } ?>
+            </ul>
+        <?php else: ?>
+            <p>Pourquoi c'est aussi vide!?</p>
+        <?php endif; ?>
+        </div>
     </div>
 </body>
 </html>

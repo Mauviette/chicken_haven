@@ -16,8 +16,8 @@ CREATE TABLE users (
 CREATE TABLE scores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    eggs INT NOT NULL,
-    eggs_last_day INT NOT NULL,
+    eggs BIGINT NOT NULL,
+    eggs_last_day BIGINT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 

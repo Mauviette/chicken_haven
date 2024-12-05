@@ -34,6 +34,11 @@ if ($user) {
     $relationStmt = $pdo->prepare('SELECT * FROM friends WHERE (user1_id = :current AND user2_id = :target) OR (user1_id = :target AND user2_id = :current)');
     $relationStmt->execute(['current' => $currentUserId, 'target' => $targetUserId]);
     $relation = $relationStmt->fetch();
+
+    // Récupérer le score actuel de l'utilisateur
+    $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
+    $stmt->execute(['user_id' => $targetUserId]);
+    $eggs = $stmt->fetchColumn();
 }
 ?>
 
@@ -85,6 +90,10 @@ if ($user) {
                 <button type="submit">Supprimer des amis</button>
             </form>
         <?php endif; ?>
+
+        <br>
+
+        <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
 
         <br><br>
     </div>

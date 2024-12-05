@@ -1,14 +1,18 @@
 /* Style général */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f4;
+  background-image: url('../../resources/images/background/login_bg.jpg');
+  background-position: center;
+  background-attachment: fixed;
+  background-size: 13%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Permet le défilement */
 }
+
+html, body {
+  overflow-x: hidden; /* Évite un défilement horizontal indésirable */
+}
+
 
 h1, h2 {
     color: #333;
@@ -68,17 +72,17 @@ a:hover {
   border-radius: 10px;
   background-color: #fff;
   width: 35%;
-  max-height: 90vh;
-  overflow-y: auto;
   padding: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-
+  max-height: none; /* Retirer la limitation de hauteur interne si présente */
+  overflow: visible; /* Empêcher la restriction des scrollbars */
   display: flex;
+  margin-top: 50px; /* Ajuste la hauteur en fonction de la navbar */
   flex-direction: column;
-  align-items: center; /* Centre les éléments horizontalement */
-  justify-content: center; /* Centre les éléments verticalement si nécessaire */
-  text-align: center; /* Centre le texte à l'intérieur */
+  align-items: center; 
+  justify-content: center;
 }
+
 
 body {
     background-image: url('../../resources/images/background/login_bg.jpg');
@@ -89,18 +93,18 @@ body {
 
 /* Navbar */
 .navbar {
-    display: flex;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    padding: .75%;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    right: 0;
-    z-index: 1000;
-    height: 50px;
-  }
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: .75%;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  height: 50px;
+}
+
   
   .profile-section {
     display: flex;

@@ -11,9 +11,10 @@ require_once '../profile_picture.php'; // Connexion à la base de données
 $username = $_SESSION['username'];
 $displayname = $_SESSION['displayname'];
 
-// Exemple de récupération :
-//$email = "user@example.com";
-//$date_inscription = "2024-01-01";
+// Récupérer le score actuel de l'utilisateur
+$stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$eggs = $stmt->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -131,9 +132,11 @@ $displayname = $_SESSION['displayname'];
 
 
         <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Profil" class="profile-icon-big">
-        <br><br>
+        <br>
         
-        
+        <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
+
+        <br>
         <a href="/chicken_haven/scripts/logout">Se déconnecter</a><br><br>
     
     </div>

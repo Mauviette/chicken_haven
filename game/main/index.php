@@ -93,7 +93,7 @@ $currentScore = $stmt->fetchColumn();
         <br><br>
 
         <div class="egg-container">
-            <div class="score" id="score"><?php echo $currentScore; ?> œufs</div>
+            <div class="score" id="score"><?php echo number_format($currentScore); ?> œufs</div>
             <div class="egg" id="egg"></div>
         </div>
         <br><br>
@@ -149,7 +149,7 @@ $currentScore = $stmt->fetchColumn();
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            document.getElementById('score').textContent = data.newScore + ' œufs';
+            document.getElementById('score').textContent = data.newScore.toLocaleString('en-US') + ' œufs';
         } else {
             alert('Erreur lors de la mise à jour du score.');
         }
