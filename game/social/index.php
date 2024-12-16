@@ -47,14 +47,16 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social - Chicken Haven</title>
-    <link rel="stylesheet" href="player_profile.css">
+    <link rel="stylesheet" href="../main/style.css">
     <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
 </head>
 <body>
 
     <?php require_once "../bars.php"; ?>
 
-    <div class="form-container">
+    <card class="form-container" style="
+  margin-top:300px;
+  max-height: 50000px;">
         <h1>Social</h1>
 
         <!-- Affiche un (!) si des demandes d'amis sont en attente -->
@@ -186,3 +188,10 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </body>
 </html>
+
+
+<style>
+
+
+
+</style>

@@ -43,7 +43,7 @@ $friends = $friendsStmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste d'amis - Chicken Haven</title>
-    <link rel="stylesheet" href="player_profile.css">
+    <link rel="stylesheet" href="../main/style.css">
     <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
 </head>
 <body>

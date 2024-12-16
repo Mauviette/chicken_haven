@@ -48,7 +48,7 @@ if ($user) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de <?php echo htmlspecialchars($username); ?> - Chicken Haven</title>    
-    <link rel="stylesheet" href="player_profile.css">
+    <link rel="stylesheet" href="../main/style.css">
     <link rel="icon" href="<?php echo htmlspecialchars(getProfilePicture($targetUserId))?>" type="image/x-icon">
 </head>
 <body>
