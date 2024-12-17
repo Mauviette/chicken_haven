@@ -55,7 +55,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php require_once "../bars.php"; ?>
 
     <card class="form-container" style="
-  margin-top:300px;
+  margin-top:30%;
   max-height: 50000px;">
         <h1>Social</h1>
 

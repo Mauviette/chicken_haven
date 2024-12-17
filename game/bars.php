@@ -27,5 +27,15 @@ echo '<!-- Barre de navigation -->
         <li><a href="/chicken_haven/game/shop/index">Boutique</a></li>
         <li><a href="/chicken_haven/game/social/index">Social ' . $notification . '</a></li>
     </ul>
-    </div>';
+    </div>
+
+    <!-- Barre latérale droite
+    <div class="sidebar-right" style="display: flex; justify-content: center;text-align: center; ">
+    <ul>
+        <li><a href="/chicken_haven/game/settings/index">Paramètres</a></li>
+        <li><a href="/chicken_haven/game/logout.php">Déconnexion</a></li>
+    </ul>
+    </div> -->
+    
+    ';
 ?>

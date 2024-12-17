@@ -1,26 +1,42 @@
 <?php
 session_start();
-require_once '../profile_picture.php'; // Connexion à la base de données
+header('Content-Type: application/json'); // Définit le type de contenu JSON
 
-if (!isset($_SESSION['user_id']) || !isset($_POST['icon_id'])) {
-    echo json_encode(['success' => false, 'message' => 'Requête invalide.']);
+require_once '../../database/db_connect.php'; // Connexion à la base de données
+
+// Vérifie que l'utilisateur est authentifié
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'message' => 'Utilisateur non authentifié.']);
     exit();
 }
 
-$userId = $_SESSION['user_id'];
-$iconId = $_POST['icon_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Récupère l'ID de l'icône depuis la requête POST
+    if (isset($_POST['icon_id']) && is_numeric($_POST['icon_id'])) {
+        $icon_id = (int) $_POST['icon_id'];
+        $user_id = $_SESSION['user_id'];
 
-// Vérifier si l'icône existe
-$stmt = $pdo->prepare('SELECT image_url FROM profile_icons WHERE id = :icon_id');
-$stmt->execute(['icon_id' => $iconId]);
-$icon = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            // Met à jour l'icône de profil de l'utilisateur dans la base de données
+            $stmt = $pdo->prepare('UPDATE users SET profile_icon_id = :icon_id WHERE id = :user_id');
+            $stmt->execute(['icon_id' => $icon_id, 'user_id' => $user_id]);
 
-if ($icon) {
-    // Mettre à jour l'image de profil de l'utilisateur
-    $updateStmt = $pdo->prepare('UPDATE users SET profile_picture = :image_url WHERE id = :user_id');
-    $updateStmt->execute(['image_url' => $icon['image_url'], 'user_id' => $userId]);
-    echo json_encode(['success' => true]);
+            // Vérifie que la mise à jour a réussi
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(['success' => true, 'message' => 'Image de profil mise à jour avec succès.']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Aucune mise à jour effectuée.']);
+            }
+        } catch (PDOException $e) {
+            // En cas d'erreur SQL
+            echo json_encode(['success' => false, 'message' => 'Erreur de base de données : ' . $e->getMessage()]);
+        }
+    } else {
+        // Si les données POST sont manquantes ou invalides
+        echo json_encode(['success' => false, 'message' => 'Données invalides.']);
+    }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Image non trouvée.']);
+    // Si la méthode HTTP n'est pas POST
+    echo json_encode(['success' => false, 'message' => 'Méthode non autorisée.']);
 }
 ?>

@@ -57,6 +57,7 @@ $currentScore = $stmt->fetchColumn();
         animation: bounce 0.25s ease-in-out;
     }
 
+    
     @keyframes fall {
         0% {
             transform: translate(0, 0) rotate(var(--start-rotation));
