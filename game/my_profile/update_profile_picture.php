@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+
 header('Content-Type: application/json'); // Définit le type de contenu JSON
 
 require_once '../../database/db_connect.php'; // Connexion à la base de données

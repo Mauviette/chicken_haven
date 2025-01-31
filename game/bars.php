@@ -9,13 +9,19 @@ $nbPendingRequests = $stmt->fetchColumn();
 
 $notification = ($nbPendingRequests > 0) ? ' <span style="color: gold;">' . $nbPendingRequests . ' </span>' : '';
 
+$sessions = json_decode(file_get_contents(__DIR__ . '/../session/sessions.json'), true);
+
+
 echo '<!-- Barre de navigation -->
     <div class="navbar">
     <div class="profile-section">
         <a href="/chicken_haven/game/my_profile/index" class="profile-link">
-        <img src=" ' . getProfilePicture($_SESSION['user_id']) . '" alt="Profil" class="profile-icon">
+        <img src=" ' . getProfilePicture($_SESSION['user_id']) . '" alt="Profil" class="profile-icon" id="profile-icon">
         <span class="username">' . htmlspecialchars($_SESSION['displayname']) . '</span>
         </a>
+    </div>
+    <div class="session-section">
+        <span>' . count($sessions) . ' en ligne</span>
     </div>
     </div>
 
@@ -35,7 +41,29 @@ echo '<!-- Barre de navigation -->
         <li><a href="/chicken_haven/game/settings/index">Paramètres</a></li>
         <li><a href="/chicken_haven/game/logout.php">Déconnexion</a></li>
     </ul>
-    </div> -->
-    
-    ';
+    </div> -->';
+
+
+    function updateProfilePicture($newSrc) {
+        echo '<script>
+            document.getElementById("profile-icon").src = "' . htmlspecialchars($newSrc) . '";
+        </script>';
+    }
+
+  
+
 ?>
+
+<script>
+    function updateSession() {
+        fetch('/chicken_haven/scripts/update_session.php')
+            .then(response => response.text())
+            .then(data => console.log('Session mise à jour'));
+    }
+
+    // Met à jour toutes les 30 secondes
+    setInterval(updateSession, 30000);
+
+    // Appel initial dès le chargement de la page
+    updateSession();
+</script>

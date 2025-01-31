@@ -6,12 +6,16 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+
 $username = $_GET['username'];
 
 if ($username == $_SESSION['username']) {
+    echo("<script>console.log('Viewing own profile');</script>");
     header('Location: /chicken_haven/game/my_profile/index');
     exit();
 }
+
+echo("<script>console.log('Viewing " . $username . "\'s profile as " . $_SESSION['username'] . " ');</script>");
 
 require_once '../../database/db_connect.php'; // Connexion à la base de données via PDO
 require_once '../profile_picture.php'; // Connexion à la base de données via PDO

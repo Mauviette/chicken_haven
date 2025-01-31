@@ -1,6 +1,26 @@
 <?php
 session_start();
+
+
 ?>
+
+
+<script>
+    function updateSession() {
+        fetch('/chicken_haven/scripts/update_session.php')
+            .then(response => response.text())
+            .then(data => console.log('Session mise à jour'));
+    }
+
+    // Met à jour toutes les 30 secondes
+    setInterval(updateSession, 30000);
+
+    // Appel initial dès le chargement de la page
+    updateSession();
+</script>
+
+
+<?php $sessions = json_decode(file_get_contents(__DIR__ . '/../session/sessions.json'), true); ?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +36,7 @@ session_start();
     <div class="form-container">
         <?php if (!isset($_SESSION['username'])): ?>
             <h1>Bienvenue sur Chicken Haven</h1>
-            <p>0 joueurs en ligne</p>
+            <p><?php echo $sessions ? count($sessions) : 0; ?> joueurs en ligne</p>
 
             <?php if (isset($_GET['error'])): ?>
                 <p class="error">
@@ -49,3 +69,4 @@ session_start();
     </div>
 </body>
 </html>
+

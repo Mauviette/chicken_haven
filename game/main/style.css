@@ -1,204 +1,5 @@
 /* Style général */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f4;
-}
-
-h1, h2 {
-    color: #333;
-}
-
-p {
-    color: #666;
-}
-
-
-
-/* Formulaires */
-form {
-    width: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
-}
-
-input[type="text"], input[type="password"], input[type="submit"] {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-input[type="submit"] {
-    background-color: #007BFF;
-    color: white;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Liens */
-a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Messages d'erreur */
-.error {
-    color: red;
-    font-weight: bold;
-}
-
-/* Background du form*/
-.form-container {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  width: 35%;
-  overflow-y: auto;
-  padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  max-height: 50000px;
-  
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centre les éléments horizontalement */
-  justify-content: center; /* Centre les éléments verticalement si nécessaire */
-  text-align: center; /* Centre le texte à l'intérieur */
-}
-
-body {
-    background-image: url('../../resources/images/background/login_bg.jpg');
-    background-position: center;
-    background-attachment: fixed;
-    background-size:13%;
-}
-
-/* Navbar */
-.navbar {
-    display: flex;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    padding: .75%;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    right: 0;
-    z-index: 1000;
-    height: 50px;
-  }
-  
-  .profile-section {
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile-link {
-    text-decoration: none;
-    color: white;
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile-icon {
-    width: 32px;
-    height: 32px;
-    margin-right: 10px;
-    margin-left: 30px;
-    border-radius: 25%;
-    background-color: #0056b3;
-  }
-  
-  .username {
-    font-size: 16px;
-  }
-  
-  /* Sidebar toujours visible */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #444;
-    color: white;
-    padding: 10px;
-    z-index: 999; /* Sous la navbar */
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 85px; /* Décalage sous la barre de navigation */
-  }
-  
-  .sidebar li {
-    margin: 25px 0;
-  }
-  
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .sidebar a:hover {
-    text-decoration: underline;
-  }
-  
-
-  /* Sidebar de droite */
-  .sidebar-right {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #444;
-    color: white;
-    padding: 10px;
-    z-index: 999; /* Sous la navbar */
-  }
-
-  .sidebar-right ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 85px; /* Décalage sous la barre de navigation */
-  }
-
-  .sidebar-right li {
-    margin: 25px 0;
-  }
-
-  .sidebar-right a {
-    color: white;
-    text-decoration: none;
-  }
-
-  .sidebar-right a:hover {
-    text-decoration: underline;
-  }
-
-  
-
-
-  /* Style général */
-body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -207,6 +8,10 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #f4f4f4;
+  background-image: url('../../resources/images/background/login_bg.jpg');
+  background-position: center;
+  background-attachment: fixed;
+  background-size: 13%;
 }
 
 h1, h2 {
@@ -218,14 +23,35 @@ p {
 }
 
 /* Formulaires */
-form:not(.no-display):not(.inline-form) {
-width: 300px;
-margin: 20px auto;
-padding: 20px;
-border: 1px solid #ccc;
-border-radius: 10px;
-background-color: #fff;
+form {
+  width: 35%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
+
+.form-container
+{
+  width: 35%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 
 input[type="text"], input[type="password"], input[type="submit"] {
   width: 80%;
@@ -261,31 +87,6 @@ a:hover {
   font-weight: bold;
 }
 
-/* Background du form*/
-.form-container {
-border: 1px solid #ccc;
-border-radius: 10px;
-background-color: #fff;
-width: 35%;
-max-height: 90vh;
-overflow-y: auto;
-padding: 20px;
-box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-
-display: flex;
-flex-direction: column;
-align-items: center; /* Centre les éléments horizontalement */
-justify-content: center; /* Centre les éléments verticalement si nécessaire */
-text-align: center; /* Centre le texte à l'intérieur */
-}
-
-body {
-  background-image: url('../../resources/images/background/login_bg.jpg');
-  background-position: center;
-  background-attachment: fixed;
-  background-size:13%;
-}
-
 /* Navbar */
 .navbar {
   display: flex;
@@ -301,76 +102,94 @@ body {
   height: 50px;
 }
 
-.profile-section {
+.profile-section, .profile-link {
   display: flex;
   align-items: center;
-}
-
-.profile-link {
   text-decoration: none;
   color: white;
-  display: flex;
-  align-items: center;
+}
+
+.profile-icon, .profile-icon-big {
+  border-radius: 25%;
+  background-color: #0056b3;
 }
 
 .profile-icon {
   width: 32px;
   height: 32px;
-  margin-right: 10px;
-  margin-left: 30px;
-  border-radius: 25%;
-  background-color: #0056b3;
+  margin: 0 10px 0 30px;
+}
+
+.profile-icon-big {
+  width: 80px;
+  height: 80px;
 }
 
 .username {
   font-size: 16px;
 }
 
-/* Sidebar toujours visible */
-.sidebar {
+/* Sidebar */
+.sidebar, .sidebar-right {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 250px;
   height: 100%;
   background-color: #444;
   color: white;
   padding: 10px;
-  z-index: 999; /* Sous la navbar */
+  z-index: 999;
 }
 
-.sidebar ul {
+.sidebar {
+  left: 0;
+  width: 15%;
+}
+
+.sidebar-right {
+  right: 0;
+  width: 12.5%;
+}
+
+.sidebar ul, .sidebar-right ul {
   list-style: none;
   padding: 0;
-  margin-top: 85px; /* Décalage sous la barre de navigation */
+  margin-top: 85px;
 }
 
-.sidebar li {
+.sidebar li, .sidebar-right li {
   margin: 25px 0;
 }
 
-.sidebar a {
+.sidebar a, .sidebar-right a {
   color: white;
   text-decoration: none;
 }
 
-.sidebar a:hover {
+.sidebar a:hover, .sidebar-right a:hover {
   text-decoration: underline;
 }
+
+/* Liste d'amis */
 .friends-list {
+  width: 80%;
   list-style-type: none;
-  padding: 0;
+}
+
+.friends-list a {
+  text-decoration: none;
+  color: #333;
 }
 
 .friends-list li {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin: 10px 0;
-background-color: #f4f4f4;
-padding: 10px;
-border-radius: 8px;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .player-icon {
@@ -383,6 +202,7 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: inline;
 }
 
+/* Boutons accept/reject */
 .accept-button, .reject-button {
   width: 20px;
   height: 20px;
@@ -395,187 +215,13 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .accept-button {
-  background-image: url('/chicken_haven/resources/images/accept.png');   
+  background-image: url('/chicken_haven/resources/images/accept.png');
 }
 
 .reject-button {
   background-image: url('/chicken_haven/resources/images/reject.png');
 }
 
-.friends-list a {
-  text-decoration: none;
-  color: #333;
+.session-section {
+  margin-left: auto;
 }
-
-
-
-/* Style général */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f4;
-}
-
-h1, h2 {
-    color: #333;
-}
-
-p {
-    color: #666;
-}
-
-
-
-/* Formulaires */
-form {
-    width: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
-}
-
-input[type="text"], input[type="password"], input[type="submit"] {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-input[type="submit"] {
-    background-color: #007BFF;
-    color: white;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Liens */
-a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Messages d'erreur */
-.error {
-    color: red;
-    font-weight: bold;
-}
-
-/* Background du form*/
-.form-container {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  width: 35%;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centre les éléments horizontalement */
-  justify-content: center; /* Centre les éléments verticalement si nécessaire */
-  text-align: center; /* Centre le texte à l'intérieur */
-}
-
-body {
-    background-image: url('../../resources/images/background/login_bg.jpg');
-    background-position: center;
-    background-attachment: fixed;
-    background-size:13%;
-}
-
-/* Navbar */
-.navbar {
-    display: flex;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    padding: .75%;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    right: 0;
-    z-index: 1000;
-    height: 50px;
-  }
-  
-  .profile-section {
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile-link {
-    text-decoration: none;
-    color: white;
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile-icon {
-    width: 32px;
-    height: 32px;
-    margin-right: 10px;
-    margin-left: 30px;
-    border-radius: 25%;
-    background-color: #0056b3;
-  }
-
-  .profile-icon-big {
-    width: 80px;
-    height: 80px;
-    border-radius: 25%;
-    background-color: #0056b3;
-  }
-  
-  .username {
-    font-size: 16px;
-  }
-  
-  /* Sidebar toujours visible */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #444;
-    color: white;
-    padding: 10px;
-    z-index: 999; /* Sous la navbar */
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 85px; /* Décalage sous la barre de navigation */
-  }
-  
-  .sidebar li {
-    margin: 25px 0;
-  }
-  
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .sidebar a:hover {
-    text-decoration: underline;
-  }
-  

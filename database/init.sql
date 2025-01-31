@@ -41,3 +41,26 @@ INSERT INTO profile_icons (id, name, image_url) VALUES
 (0, 'Black', 'black'),
 (1, 'Red', 'red'),
 (2, 'White', 'white');
+
+CREATE TABLE chickens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    image_url VARCHAR(255) NOT NULL
+    rarity ENUM('common', 'rare', 'epic', 'legendary') NOT NULL DEFAULT 'common';
+);
+
+CREATE TABLE user_chickens (
+    user_id INT NOT NULL,
+    chicken_id INT NOT NULL,
+    count INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (user_id, chicken_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (chicken_id) REFERENCES chickens(id) ON DELETE CASCADE
+);
+
+INSERT INTO chickens (name, image_url, rarity) VALUES
+("Poule rousse", 'red', 'common'),
+("Poule noire", 'black', 'common'),
+("Poule blanche", 'white', 'common');
+
+ALTER TABLE user_chickens ADD UNIQUE(user_id, chicken_id);

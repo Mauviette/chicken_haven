@@ -27,8 +27,8 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon profil - Chicken Haven</title>    
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="images/game.png" type="image/x-icon">
+    <link rel="stylesheet" href="../main/style.css">
+    <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
     <style>
         /* Styles pour la popup et l'overlay */
         .popup {
@@ -43,6 +43,7 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border: 1px solid #888;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             text-align: center;
+            width: 40%;
         }
         .popup .close {
             position: absolute;
@@ -84,10 +85,11 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="form-container">
         <h1>Mon profil</h1>
-        <p><strong><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
 
-        <button id="editDisplayNameBtn">Modifier le nom d'affichage</button>
-        <br><br><br>
+        <div id="return_message"></div>
+        <p><strong id="username"><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
+
+        <button id="editDisplayNameBtn" style="margin: 2%;">Modifier le nom d'affichage</button>
 
         <!-- Image actuelle du profil -->
         <img id="currentProfilePic" src="<?php echo getProfilePicture($_SESSION['user_id']); ?>" alt="Profil" class="profile-icon-big" style="cursor: pointer;">
@@ -111,9 +113,9 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div id="editDisplayNamePopup" class="popup">
             <div class="popup-content">
-                <span class="close">&times;</span>
+                <span class="close" id="closeEditNamePopup">&times;</span>
                 <h2>Modifier le nom d'affichage</h2>
-                <form id="editDisplayNameForm" action="update_displayname" method="post">
+                <form id="editDisplayNameForm">
                     <label for="newDisplayName">Nouveau nom d'affichage:</label>
                     <input type="text" id="newDisplayName" name="newDisplayName" required>
                     <button type="submit">Enregistrer</button> 
@@ -159,6 +161,12 @@ document.getElementById('editDisplayNameBtn').addEventListener('click', function
             document.getElementById('overlay').style.display = 'none';
         });
 
+        // Fermer la modale du nom d'affichage
+        document.getElementById('closeEditNamePopup').addEventListener('click', function() {
+            document.getElementById('editDisplayNamePopup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        });
+
         // Fermer la modale en cliquant sur l'overlay
         document.getElementById('overlay').addEventListener('click', function() {
             document.getElementById('profileIconsPopup').style.display = 'none';
@@ -181,13 +189,49 @@ document.getElementById('editDisplayNameBtn').addEventListener('click', function
                     if (data.success) {
                         // Mettre à jour l'image actuelle
                         document.getElementById('currentProfilePic').src = this.src;
+                        document.getElementById("profile-icon").src = this.src;
                         // Fermer la modale
                         document.getElementById('profileIconsPopup').style.display = 'none';
                         document.getElementById('overlay').style.display = 'none';
+                        document.getElementById('return_message').innerHTML = data.message;
+                        document.getElementById('return_message').style.color = 'green';
+
                     } else {
-                        alert('Erreur : ' + data.message);
+                        document.getElementById('profileIconsPopup').style.display = 'none';
+                        document.getElementById('overlay').style.display = 'none';
+                        document.getElementById('return_message').innerHTML = data.message;
+                        document.getElementById('return_message').style.color = 'red';
                     }
                 });
+            });
+        });
+
+        document.getElementById('editDisplayNameForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('update_displayname.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    //Mettre à jour les pseudos sur l'écran
+                    document.querySelector('.username').textContent = formData.get('newDisplayName');
+                    document.getElementById('username').textContent = formData.get('newDisplayName');
+
+                    document.getElementById('editDisplayNamePopup').style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('return_message').innerHTML = data.message;
+                    document.getElementById('return_message').style.color = 'green';
+                } else {
+                    document.getElementById('return_message').innerHTML = data.message;
+                    document.getElementById('return_message').style.color = 'red';
+                    document.getElementById('editDisplayNamePopup').style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                }
             });
         });
 

@@ -83,7 +83,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
 
 
-        <div style ="  width: 400px;
+        <div style ="  width: 90%;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -97,21 +97,37 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php if  ($player['id'] == $currentUserId): ?>
                         <?php $playerOnLeaderBoard = true; ?>
                         <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
+                            <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+
                             <li style="background-color: #ccc;">
+                            <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                             <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                             </li>
                         </a>
+
                     <?php else: ?>
+
+                        <?php //Vérifie si l'utilisateur est en ami
+                        $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE (user1_id = :current_user_id AND user2_id = :player_id) OR (user1_id = :player_id AND user2_id = :current_user_id) AND accepted = 1');
+                        $stmt->execute(['current_user_id' => $currentUserId, 'player_id' => $player['id']]);
+                        $isFriend = $stmt->fetchColumn() > 0;
+                        ?>
+
                         <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
                             <li>
-                            <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
-                            <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
-                            <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                                <?php if ($isFriend) {
+                                echo '<img src="/chicken_haven/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">'; }
+                                else echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
+                                ?>
+                                <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
+                                <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                                <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                             </li>
                         </a>
                     <?php endif; ?>
+
                 <?php endforeach; ?>
                 <?php if (!$playerOnLeaderBoard) {?>
                     <?php $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
@@ -119,7 +135,9 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     $eggs = $stmt->fetchColumn();
                     ?>
                         <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
+
                             <li style="background-color: #ccc;">
+                            <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                             <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs)) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
@@ -133,7 +151,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
 
-        <div style ="  width: 400px;
+        <div style ="  width: 90%;
                         margin: 20px auto;
                         padding: 20px;
                         border: 1px solid #ccc;
@@ -150,16 +168,32 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $eggs_last_day = $stmt->fetchColumn();
                         ?>
                         <?php $playerOnLeaderBoard = true; ?>
+                        
                         <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
                             <li style="background-color: #ccc;">
+                            <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                             <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                             </li>
                         </a>
                     <?php else: ?>
+                        
+                        <?php //Vérifie si l'utilisateur est en ami
+                        $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE (user1_id = :current_user_id AND user2_id = :player_id) OR (user1_id = :player_id AND user2_id = :current_user_id) AND accepted = 1');
+                        $stmt->execute(['current_user_id' => $currentUserId, 'player_id' => $player['id']]);
+                        $isFriend = $stmt->fetchColumn() > 0;
+                        ?>
+                        
                         <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
+                            
+
                             <li>
+                            <?php if ($isFriend) {
+                            echo '<img src="/chicken_haven/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">';
+                            echo ('<script>console.log("test");</script>');
+                            } ?>
+
                             <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
@@ -172,8 +206,10 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     $stmt->execute(['user_id' => $currentUserId]);
                     $eggs_last_day = $stmt->fetchColumn();
                     ?>
+
                         <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
                             <li style="background-color: #ccc;">
+                            <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                             <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs_last_day)) ?> oeufs</p>
                             <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
                             <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
