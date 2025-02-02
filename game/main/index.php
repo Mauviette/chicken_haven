@@ -72,6 +72,30 @@ $currentScore = $stmt->fetchColumn();
         }
     }
 
+    .floating-text {
+        position: absolute;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffcc00;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        opacity: 1;
+        animation: flyUp 1s ease-out forwards;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    @keyframes flyUp {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+    }
+
+
     .egg-fragment {
         position: absolute;
         width: 20px;
@@ -88,23 +112,23 @@ $currentScore = $stmt->fetchColumn();
 <body>
 
   <?php require_once "../bars.php"; ?>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Bienvenue <?php echo htmlspecialchars($_SESSION['displayname']); ?></h1>
+            <br><br>
 
-    <div class="form-container">
-        <h1>Bienvenue <?php echo htmlspecialchars($_SESSION['displayname']); ?></h1>
-        <br><br>
-
-        <div class="egg-container">
-            <div class="score" id="score"><?php echo number_format($currentScore); ?> œufs</div>
-            <div class="egg" id="egg"></div>
+            <div class="egg-container">
+                <div class="score" id="score"><?php echo number_format($currentScore); ?> œufs</div>
+                <div class="egg" id="egg"></div>
+            </div>
+            <br><br>
         </div>
-        <br><br>
     </div>
-
 
 
     <!-- Javascript -->
     <script>
-    document.getElementById('egg').addEventListener('click', function(event) {
+document.getElementById('egg').addEventListener('click', function(event) {
     const egg = document.getElementById('egg');
 
     // Ajouter la classe d'animation pour l'œuf
@@ -139,23 +163,47 @@ $currentScore = $stmt->fetchColumn();
         fragment.remove();
     });
 
-    // Mettre à jour le score via une requête fetch
-    fetch('update_score.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ increment: 1 })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('score').textContent = data.newScore.toLocaleString('en-US') + ' œufs';
-        } else {
-            alert('Erreur lors de la mise à jour du score.');
+    // Envoyer une requête AJAX à clicked.php pour mettre à jour le score
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'clicked.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Parse the JSON response
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                // Mettre à jour le score affiché
+                document.getElementById('score').textContent = response.newScore + ' œufs';
+
+                // Animation du "+score"
+                clickAnimation(event, response.increment);
+            }
         }
-    });
+    };
+    xhr.send();
+
 });
+
+
+function clickAnimation(event, increment) {
+    // Création de l'élément du "+score"
+    let floatingText = document.createElement("span");
+    floatingText.textContent = `+${increment}`;
+    floatingText.classList.add("floating-text");
+
+    // Positionner l'élément au niveau du clic
+    floatingText.style.left = `${event.clientX}px`;
+    floatingText.style.top = `${event.clientY}px`;
+
+    document.body.appendChild(floatingText);
+
+    // Supprimer l'élément après l'animation
+    setTimeout(() => {
+        floatingText.remove();
+    }, 1000); // Correspond à la durée de l'animation
+}
+
+
 </script>
 
 </body>

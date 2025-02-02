@@ -17,7 +17,15 @@ $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $eggs = $stmt->fetchColumn();
 
 // Récupérer les images disponibles dans la base de données
-$stmt = $pdo->query('SELECT id, name, image_url FROM profile_icons');
+$stmt = $pdo->prepare('SELECT c.id, c.name, c.image_url, c.rarity 
+                       FROM chickens c
+                       JOIN user_chickens uc ON c.id = uc.chicken_id
+                       WHERE uc.user_id = :user_id
+                       UNION
+                       SELECT c.id, c.name, c.image_url, c.rarity 
+                       FROM chickens c
+                       WHERE c.id = 1');
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
 $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -29,105 +37,58 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Mon profil - Chicken Haven</title>    
     <link rel="stylesheet" href="../main/style.css">
     <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
-    <style>
-        /* Styles pour la popup et l'overlay */
-        .popup {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border: 1px solid #888;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 40%;
-        }
-        .popup .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .profile-icons-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .profile-icon-option {
-            width: 100px;
-            height: 100px;
-            margin: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .profile-icon-option:hover {
-            transform: scale(1.1);
-        }
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-    </style>
 </head>
 <body>
 
     <?php require_once "../bars.php"; ?>
 
-    <div class="form-container">
-        <h1>Mon profil</h1>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Mon profil</h1>
 
-        <div id="return_message"></div>
-        <p><strong id="username"><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
+            <div id="return_message"></div>
+            <p><strong id="username"><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
 
-        <button id="editDisplayNameBtn" style="margin: 2%;">Modifier le nom d'affichage</button>
+            <button id="editDisplayNameBtn" style="margin: 2%;">Modifier le nom d'affichage</button>
 
-        <!-- Image actuelle du profil -->
-        <img id="currentProfilePic" src="<?php echo getProfilePicture($_SESSION['user_id']); ?>" alt="Profil" class="profile-icon-big" style="cursor: pointer;">
-        <p>Cliquez sur l'image pour changer de photo de profil.</p>
+            <!-- Image actuelle du profil -->
+            <img id="currentProfilePic" src="<?php echo getProfilePicture($_SESSION['user_id']); ?>" alt="Profil" class="profile-icon-big" style="cursor: pointer;">
+            <p>Cliquez sur l'image pour changer de photo de profil.</p>
 
-        <!-- Popup pour les icônes de profil -->
-        <div id="profileIconsPopup" class="popup">
-            <div class="popup-content">
-                <span class="close" id="closeProfileIconsPopup">&times;</span>
-                <h2>Choisir une nouvelle photo de profil</h2>
-                <div class="profile-icons-container">
-                    <?php foreach ($profileIcons as $icon): ?>
-                        <img src="<?php echo htmlspecialchars("/chicken_haven/resources/images/profile_icon/" . $icon['image_url']) . ".png"?>" 
-                             alt="<?php echo htmlspecialchars($icon['name']); ?>" 
-                             class="profile-icon-option" 
-                             data-icon-id="<?php echo $icon['id']; ?>">
-                    <?php endforeach; ?>
+            <!-- Popup pour les icônes de profil -->
+            <div id="profileIconsPopup" class="popup">
+                <div class="popup-content">
+                    <span class="close" id="closeProfileIconsPopup">&times;</span>
+                    <h2>Choisir une nouvelle photo de profil</h2>
+                    <div class="profile-icons-container">
+                        <?php foreach ($profileIcons as $icon): ?>
+                            <img src="<?php echo htmlspecialchars("/chicken_haven/resources/images/chickens/" . $icon['image_url']) . ".png"?>" 
+                                alt="<?php echo htmlspecialchars($icon['name']); ?>" 
+                                class="profile-icon-option" 
+                                data-icon-id="<?php echo $icon['id']; ?>">
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="editDisplayNamePopup" class="popup">
-            <div class="popup-content">
-                <span class="close" id="closeEditNamePopup">&times;</span>
-                <h2>Modifier le nom d'affichage</h2>
-                <form id="editDisplayNameForm">
-                    <label for="newDisplayName">Nouveau nom d'affichage:</label>
-                    <input type="text" id="newDisplayName" name="newDisplayName" required>
-                    <button type="submit">Enregistrer</button> 
-                </form>
+            <div id="editDisplayNamePopup" class="popup">
+                <div class="popup-content">
+                    <span class="close" id="closeEditNamePopup">&times;</span>
+                    <h2>Modifier le nom d'affichage</h2>
+                    <form id="editDisplayNameForm">
+                        <label for="newDisplayName">Nouveau nom d'affichage:</label>
+                        <input type="text" id="newDisplayName" name="newDisplayName" required>
+                        <button type="submit">Enregistrer</button> 
+                    </form>
+                </div>
             </div>
+
+            <div id="overlay"></div>
+
+            <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
+            <br>
+            <a href="/chicken_haven/scripts/logout">Se déconnecter</a><br><br>
         </div>
-
-        <div id="overlay"></div>
-
-        <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
-        <br>
-        <a href="/chicken_haven/scripts/logout">Se déconnecter</a><br><br>
     </div>
 
     <script>

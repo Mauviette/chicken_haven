@@ -7,10 +7,10 @@ function getProfilePicture($user_id) {
     $stmt->execute(['user_id' => $user_id]);
     $profile_icon_id = $stmt->fetchColumn();
 
-    $stmt = $pdo->prepare('SELECT image_url FROM profile_icons WHERE id = :profile_icon_id');
+    $stmt = $pdo->prepare('SELECT image_url FROM chickens WHERE id = :profile_icon_id');
     $stmt->execute(['profile_icon_id' => $profile_icon_id]);
     $url = $stmt->fetchColumn();
-    return "/chicken_haven/resources/images/profile_icon/" . $url . ".png";
+    return "/chicken_haven/resources/images/chickens/" . $url . ".png";
 }
 
 

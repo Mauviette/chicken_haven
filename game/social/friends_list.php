@@ -53,8 +53,26 @@ $friends = $friendsStmt->fetchAll();
     <div class="form-container">
         <h1>Mes amis</h1>
 
+        <!-- Affichage des amis -->
+        <h2>👥 Liste d'amis</h2>
+        <?php if (!empty($friends)): ?>
+            <ul class="friends-list">
+                <?php foreach ($friends as $friend): ?>
+                    <a href="player?username=<?php echo htmlspecialchars($friend['username']);?>" style="no-link">
+                    <li>
+                            <img src="<?php echo getProfilePicture($friend['id']);?>" alt="Icone joueur" class="player-icon">
+                        <strong><?php echo htmlspecialchars($friend['displayname']); ?></strong> @<?php echo htmlspecialchars($friend['username']); ?>
+                    </li>
+                    </a>
+
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>Vous n'avez pas encore d'amis.</p>
+        <?php endif; ?>
+
         <!-- Affichage des demandes d'amis reçues -->
-        <h2>Demandes d'amis reçues</h2>
+        <h2>🔔 Demandes d'amis reçues</h2>
         <?php if (!empty($pendingRequests)): ?>
             <ul class="friends-list">
                 <?php foreach ($pendingRequests as $request): ?>
@@ -78,23 +96,39 @@ $friends = $friendsStmt->fetchAll();
             <p>Aucune demande d'amis reçue.</p>
         <?php endif; ?>
 
-        <!-- Affichage des amis -->
-        <h2>Liste d'amis</h2>
-        <?php if (!empty($friends)): ?>
-            <ul class="friends-list">
-                <?php foreach ($friends as $friend): ?>
-                    <a href="player?username=<?php echo htmlspecialchars($friend['username']);?>" style="no-link">
-                    <li>
-                            <img src="<?php echo getProfilePicture($friend['id']);?>" alt="Icone joueur" class="player-icon">
-                        <strong><?php echo htmlspecialchars($friend['displayname']); ?></strong> @<?php echo htmlspecialchars($friend['username']); ?>
-                    </li>
-                    </a>
 
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p>Vous n'avez pas encore d'amis.</p>
-        <?php endif; ?>
+        <!-- Demandes d'amis envoyées -->
+        <h2>📤 Demandes d'amis envoyées</h2
+        >
+    <?php
+    $sentRequestsStmt = $pdo->prepare('
+        SELECT u.id, u.username, u.displayname
+        FROM friends f
+        JOIN users u ON f.user2_id = u.id
+        WHERE f.user1_id = :currentUser AND f.accepted = 0
+    ');
+    $sentRequestsStmt->execute(['currentUser' => $currentUserId]);
+    $sentRequests = $sentRequestsStmt->fetchAll();
+    ?>
+
+    <?php if (!empty($sentRequests)): ?>
+        <ul class="friends-list">
+            <?php foreach ($sentRequests as $request): ?>
+                <a href="player?username=<?php echo htmlspecialchars($request['username']);?>">
+                <li>
+                    <img src="<?php echo getProfilePicture($request['id']);?>" alt="Icone joueur" class="player-icon">
+                    <strong style="margin : 10px;"><?php echo htmlspecialchars($request['displayname']); ?></strong> @<?php echo htmlspecialchars($request['username']); ?>
+                    <form action="requests/cancel_friend.php" method="post" class="no-display" style="display: inline;">
+                        <input type="hidden" name="friend_id" value="<?php echo $request['id']; ?>">
+                        <button type="submit" class="cancel-button" title="Annuler la demande"></button>
+                    </form>
+                </li>
+                </a>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Aucune demande d'amis envoyée.</p>
+    <?php endif; ?>
     </div>
 </body>
 </html>

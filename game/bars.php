@@ -30,18 +30,18 @@ echo '<!-- Barre de navigation -->
     <ul>
         <li><a href="/chicken_haven/game/main/index">Accueil</a></li>
         <li><a href="/chicken_haven/game/hatchery/index">Couvoir</a></li>
-        <li><a href="/chicken_haven/game/shop/index">Boutique</a></li>
+        <li><a href="/chicken_haven/game/shop/index">Marché</a></li>
         <li><a href="/chicken_haven/game/social/index">Social ' . $notification . '</a></li>
     </ul>
     </div>
 
-    <!-- Barre latérale droite
+    <!-- Barre latérale droite -->
     <div class="sidebar-right" style="display: flex; justify-content: center;text-align: center; ">
     <ul>
         <li><a href="/chicken_haven/game/settings/index">Paramètres</a></li>
         <li><a href="/chicken_haven/game/logout.php">Déconnexion</a></li>
     </ul>
-    </div> -->';
+    </div>';
 
 
     function updateProfilePicture($newSrc) {

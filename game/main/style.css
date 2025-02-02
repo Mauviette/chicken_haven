@@ -23,7 +23,7 @@ p {
 }
 
 /* Formulaires */
-form {
+form:not(.no-display) {
   width: 35%;
   margin: 20px auto;
   padding: 20px;
@@ -39,8 +39,7 @@ form {
 
 .form-container
 {
-  width: 35%;
-  margin: 20px auto;
+  width: 100%;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -52,6 +51,9 @@ form {
   text-align: center;
 }
 
+.main-container
+{
+}
 
 input[type="text"], input[type="password"], input[type="submit"] {
   width: 80%;
@@ -171,8 +173,9 @@ a:hover {
 
 /* Liste d'amis */
 .friends-list {
-  width: 80%;
+  width: 100%;
   list-style-type: none;
+  margin: 0 auto;
 }
 
 .friends-list a {
@@ -203,7 +206,7 @@ a:hover {
 }
 
 /* Boutons accept/reject */
-.accept-button, .reject-button {
+.accept-button, .reject-button, .cancel-button {
   width: 20px;
   height: 20px;
   border: none;
@@ -222,6 +225,73 @@ a:hover {
   background-image: url('/chicken_haven/resources/images/reject.png');
 }
 
+.cancel-button {
+  background-image: url('/chicken_haven/resources/images/reject.png');
+}
+
 .session-section {
   margin-left: auto;
+}
+
+
+  /* Styles pour la popup et l'overlay */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #888;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  width: 40%;
+  }
+
+.popup .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.profile-icons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.profile-icon-option {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.profile-icon-option:hover {
+  transform: scale(1.1);
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.friends-section {
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
 }
