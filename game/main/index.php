@@ -79,7 +79,7 @@ $currentScore = $stmt->fetchColumn();
         color: #ffcc00;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         opacity: 1;
-        animation: flyUp 1s ease-out forwards;
+        animation: flyUp 1.5s ease-out forwards;
         pointer-events: none;
         user-select: none;
     }
@@ -90,7 +90,7 @@ $currentScore = $stmt->fetchColumn();
             opacity: 1;
         }
         100% {
-            transform: translateY(-50px);
+            transform: translateY(-75px);
             opacity: 0;
         }
     }
@@ -173,7 +173,7 @@ document.getElementById('egg').addEventListener('click', function(event) {
             const response = JSON.parse(xhr.responseText);
             if (response.success) {
                 // Mettre à jour le score affiché
-                document.getElementById('score').textContent = response.newScore + ' œufs';
+                document.getElementById('score').textContent = new Intl.NumberFormat().format(response.newScore) + ' œufs';
 
                 // Animation du "+score"
                 clickAnimation(event, response.increment);
