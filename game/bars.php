@@ -11,6 +11,18 @@ $notification = ($nbPendingRequests > 0) ? ' <span style="color: gold;">' . $nbP
 
 $sessions = json_decode(file_get_contents(__DIR__ . '/../session/sessions.json'), true);
 
+// Récupérer les poules dans les incubateurs
+$stmt = $pdo->prepare("
+SELECT i.slot_number, c.name, c.image_url, c.rarity, c.effect, c.id
+FROM incubators i
+JOIN chickens c ON i.chicken_id = c.id
+WHERE i.user_id = :user_id
+ORDER BY i.slot_number
+");
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$incubatorChickens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 echo '<!-- Barre de navigation -->
     <div class="navbar">
@@ -36,12 +48,36 @@ echo '<!-- Barre de navigation -->
     </div>
 
     <!-- Barre latérale droite -->
-    <div class="sidebar-right" style="display: flex; justify-content: center;text-align: center; ">
+    <div class="sidebar-right">
     <ul>
-        <li><a href="/chicken_haven/game/settings/index">Paramètres</a></li>
+        <div class="incubator-container-side">
+';
+
+for ($slot = 1; $slot <= 3; $slot++) {
+    $chicken = array_filter($incubatorChickens, function ($incubatorChicken) use ($slot) {
+        return $incubatorChicken['slot_number'] == $slot;
+    });
+    $chicken = reset($chicken);
+
+    echo '
+    <div class="nest-slot-side">
+        <img src="/chicken_haven/resources/images/chicken_nest.png" alt="Nid ' . $slot . '" class="nest-image-side">';
+        
+    if ($chicken) {
+        echo '
+        <img src="/chicken_haven/resources/images/chickens/' . htmlspecialchars($chicken['image_url']) . '.png"
+             alt="' . htmlspecialchars($chicken['name']) . '"
+             class="chicken-on-nest-side"';
+    }
+
+    echo '</div>';
+}
+
+echo '
+            </div>
         <li><a href="/chicken_haven/game/logout.php">Déconnexion</a></li>
     </ul>
-    </div>';
+</div>';
 
 
     function updateProfilePicture($newSrc) {

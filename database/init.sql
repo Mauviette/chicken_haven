@@ -1,9 +1,22 @@
-DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 0;
+
 DROP TABLE IF EXISTS scores;
 DROP TABLE IF EXISTS friends;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS chickens;
 DROP TABLE IF EXISTS user_chickens;
 DROP TABLE IF EXISTS incubators;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE chickens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    rarity ENUM('common', 'rare', 'epic', 'legendary') NOT NULL DEFAULT 'common',
+    effect VARCHAR(255) NOT NULL DEFAULT 'none',
+    multiplier FLOAT NOT NULL DEFAULT 1
+);
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,15 +44,6 @@ CREATE TABLE friends (
     FOREIGN KEY (user1_id) REFERENCES users(id),
     FOREIGN KEY (user2_id) REFERENCES users(id),
     accepted BOOLEAN NOT NULL
-);
-
-CREATE TABLE chickens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    image_url VARCHAR(255) NOT NULL,
-    rarity ENUM('common', 'rare', 'epic', 'legendary') NOT NULL DEFAULT 'common',
-    effect VARCHAR(255) NOT NULL DEFAULT 'none',
-    multiplier FLOAT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE user_chickens (

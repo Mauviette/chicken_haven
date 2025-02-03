@@ -150,6 +150,7 @@ a:hover {
 .sidebar-right {
   right: 0;
   width: 12.5%;
+  max-width: 12.5%;
 }
 
 .sidebar ul, .sidebar-right ul {
@@ -295,3 +296,28 @@ a:hover {
   border-radius: 10px;
   background-color: #fff;
 }
+
+.incubator-container-side {
+}
+
+.nest-slot-side {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: inline-block; 
+  margin: 10px;
+}
+
+.nest-image-side {
+  width: 100%;
+}
+
+.chicken-on-nest-side {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+}
+
