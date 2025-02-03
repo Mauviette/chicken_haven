@@ -27,7 +27,7 @@ $incubatorChickens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo '<!-- Barre de navigation -->
     <div class="navbar">
     <div class="profile-section">
-        <a href="/chicken_haven/game/my_profile/index" class="profile-link">
+        <a href="/game/my_profile/index.php" class="profile-link">
         <img src=" ' . getProfilePicture($_SESSION['user_id']) . '" alt="Profil" class="profile-icon" id="profile-icon">
         <span class="username">' . htmlspecialchars($_SESSION['displayname']) . '</span>
         </a>
@@ -40,42 +40,45 @@ echo '<!-- Barre de navigation -->
     <!-- Barre latérale -->
     <div class="sidebar" style="display: flex; justify-content: center;text-align: center;">
     <ul>
-        <li><a href="/chicken_haven/game/main/index">Accueil</a></li>
-        <li><a href="/chicken_haven/game/hatchery/index">Couvoir</a></li>
-        <li><a href="/chicken_haven/game/shop/index">Marché</a></li>
-        <li><a href="/chicken_haven/game/social/index">Social ' . $notification . '</a></li>
+        <li><a href="/game/main/index.php">Accueil</a></li>
+        <li><a href="/game/hatchery/index.php">Couvoir</a></li>
+        <li><a href="/game/shop/index.php">Marché</a></li>
+        <li><a href="/game/social/index.php">Social ' . $notification . '</a></li>
     </ul>
     </div>
 
     <!-- Barre latérale droite -->
     <div class="sidebar-right">
     <ul>
-        <div class="incubator-container-side">
-';
+        <section class="incubator-container-side" style="display: flex; justify-content: center; align-items: center;">
+        ';
 
-for ($slot = 1; $slot <= 3; $slot++) {
-    $chicken = array_filter($incubatorChickens, function ($incubatorChicken) use ($slot) {
-        return $incubatorChicken['slot_number'] == $slot;
-    });
-    $chicken = reset($chicken);
+        for ($slot = 1; $slot <= 3; $slot++) {
+            $chicken = array_filter($incubatorChickens, function ($incubatorChicken) use ($slot) {
+                return $incubatorChicken['slot_number'] == $slot;
+            });
+            $chicken = reset($chicken);
 
-    echo '
-    <div class="nest-slot-side">
-        <img src="/chicken_haven/resources/images/chicken_nest.png" alt="Nid ' . $slot . '" class="nest-image-side">';
-        
-    if ($chicken) {
+            echo '
+            <div class="nest-slot-side" style="position: relative; margin: 0 10px;">
+                <img src="/resources/images/chicken_nest.png" alt="Nid ' . $slot . '" class="nest-image-side" style="position: absolute; top: 0; left: 0;">';
+                
+            if ($chicken) {
+                echo '
+                <img src="/resources/images/chickens/' . htmlspecialchars($chicken['image_url']) . '.png"
+                     alt="' . htmlspecialchars($chicken['name']) . '"
+                     class="chicken-on-nest-side" style="position: absolute; top: 0; left: 0;">';
+            }
+
+            echo '
+            </div>';
+        }
+
         echo '
-        <img src="/chicken_haven/resources/images/chickens/' . htmlspecialchars($chicken['image_url']) . '.png"
-             alt="' . htmlspecialchars($chicken['name']) . '"
-             class="chicken-on-nest-side"';
-    }
-
-    echo '</div>';
-}
+        </section>';
 
 echo '
-            </div>
-        <li><a href="/chicken_haven/game/logout.php">Déconnexion</a></li>
+        <li><a href="/scripts/logout.php">Déconnexion</a></li>
     </ul>
 </div>';
 
@@ -92,7 +95,7 @@ echo '
 
 <script>
     function updateSession() {
-        fetch('/chicken_haven/scripts/update_session.php')
+        fetch('/scripts/update_session.php')
             .then(response => response.text())
             .then(data => console.log('Session mise à jour'));
     }

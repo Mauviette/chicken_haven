@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../../index");
+    header("Location: ../../index.php");
     exit();
 }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['friend_id'])) {
     header('Location: ../friends_list');
     exit();
 } else {
-    header('Location: ../index');
+    header('Location: ../index.php');
     exit();
 }
 ?>

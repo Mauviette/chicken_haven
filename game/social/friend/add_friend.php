@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: /chicken_haven/index");
+    header("Location: /index.php");
     exit();
 }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user2 = $stmt->fetch();
 
         if (!$user1 || !$user2) {
-            header("Location: /chicken_haven/game/social/index?error=usernotfound");
+            header("Location: /game/social/index.php?error=usernotfound");
             exit();
         }
 
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $checkStmt->execute(['user1' => $user1_id, 'user2' => $user2_id]);
         
         if ($checkStmt->rowCount() > 0) {
-            header("Location: /chicken_haven/game/social/player?username=" . urlencode($targetUsername) . "&error=alreadyfriends");
+            header("Location: /game/social/player.php?username=" . urlencode($targetUsername) . "&error=alreadyfriends");
             exit();
         }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $insertStmt = $pdo->prepare('INSERT INTO friends (user1_id, user2_id, accepted) VALUES (:user1, :user2, false)');
         $insertStmt->execute(['user1' => $user1_id, 'user2' => $user2_id]);
 
-        header("Location: /chicken_haven/game/social/player?username=" . urlencode($targetUsername) . "&success=requestsent");
+        header("Location: /game/social/player.php?username=" . urlencode($targetUsername) . "&success=requestsent");
         exit();
 
     } catch (PDOException $e) {
@@ -54,6 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 } else {
-    header("Location: /chicken_haven/game/social/index");
+    header("Location: /game/social/index.php");
     exit();
 }

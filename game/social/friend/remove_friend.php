@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('Location: /chicken_haven/index');
+    header('Location: /index.php');
     exit();
 }
 
@@ -23,5 +23,5 @@ $targetUserId = $stmt->fetchColumn();
 $deleteStmt = $pdo->prepare('DELETE FROM friends WHERE (user1_id = :currentUser AND user2_id = :targetUser) OR (user1_id = :targetUser AND user2_id = :currentUser) AND accepted = 1');
 $deleteStmt->execute(['currentUser' => $currentUserId, 'targetUser' => $targetUserId]);
 
-header('Location: ../player?username=' . urlencode($targetUsername));
+header('Location: ../player.php?username=' . urlencode($targetUsername));
 exit();

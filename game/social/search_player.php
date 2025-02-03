@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            header("Location: /chicken_haven/game/social/player?username=" . urlencode($searchedUsername));
+            header("Location: /game/social/player.php?username=" . urlencode($searchedUsername));
             exit();
         } else {
             // Si l'utilisateur n'existe pas, afficher un message d'erreur

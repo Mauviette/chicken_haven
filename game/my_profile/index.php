@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('Location: /chicken_haven/index');
+    header('Location: /index.php');
     exit();
 }
 
@@ -36,7 +36,7 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon profil - Chicken Haven</title>    
     <link rel="stylesheet" href="../main/style.css">
-    <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/game.png" type="image/x-icon">
 </head>
 <body>
 
@@ -62,7 +62,7 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h2>Choisir une nouvelle photo de profil</h2>
                     <div class="profile-icons-container">
                         <?php foreach ($profileIcons as $icon): ?>
-                            <img src="<?php echo htmlspecialchars("/chicken_haven/resources/images/chickens/" . $icon['image_url']) . ".png"?>" 
+                            <img src="<?php echo htmlspecialchars("/resources/images/chickens/" . $icon['image_url']) . ".png"?>" 
                                 alt="<?php echo htmlspecialchars($icon['name']); ?>" 
                                 class="profile-icon-option" 
                                 data-icon-id="<?php echo $icon['id']; ?>">
@@ -87,7 +87,7 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
             <br>
-            <a href="/chicken_haven/scripts/logout">Se déconnecter</a><br><br>
+            <a href="/scripts/logout.php">Se déconnecter</a><br><br>
         </div>
     </div>
 

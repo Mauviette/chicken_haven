@@ -7,7 +7,7 @@ session_start();
 
 <script>
     function updateSession() {
-        fetch('/chicken_haven/scripts/update_session.php')
+        fetch('/scripts/update_session.php')
             .then(response => response.text())
             .then(data => console.log('Session mise à jour'));
     }
@@ -29,7 +29,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Chicken Haven</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="/chicken_haven/resources/images/login.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/login.png" type="image/x-icon">
 
 </head>
 <body>
@@ -50,7 +50,7 @@ session_start();
                 </p>
             <?php endif; ?>
 
-            <form method="POST" action="try_login" class="form">
+            <form method="POST" action="try_login.php" class="form">
                 <div>
                     <label for="username">Nom d'utilisateur :</label><br>
                     <input type="text" name="username" id="username" required>
@@ -61,10 +61,10 @@ session_start();
                 </div>
                 <button type="submit">Se connecter</button>
             </form>
-            <a href="register">S'inscrire</a>
+            <a href="register.php">S'inscrire</a>
             <br><br>
         <?php else: 
-            header("Location: /chicken_haven/game/main/index"); 
+            header("Location: /game/main/index.php"); 
         endif; ?>
     </div>
 </body>

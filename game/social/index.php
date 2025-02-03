@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../index");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -48,21 +48,21 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social - Chicken Haven</title>
     <link rel="stylesheet" href="../main/style.css">
-    <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/game.png" type="image/x-icon">
 </head>
-<>
+<body>
 
 
     <?php require_once "../bars.php"; ?>
 
     <div class="main-container">
         <card class="form-container" style="
-            margin-top:100px;
+            margin-top:200px;
             max-height: 50000px;">
             <h1>Social</h1>
 
             <!-- Affiche un (!) si des demandes d'amis sont en attente -->
-            <a href="friends_list" class="button">
+            <a href="friends_list.php" class="button">
                 Mes amis 
                 <?php if ($nbPendingRequests > 0) echo '<span style="color: gold;">(' . htmlspecialchars($nbPendingRequests) . ')</span>';?>
             </a>
@@ -101,9 +101,9 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             if ($player['id'] == $currentUserId):
                             $playerOnLeaderBoard = true; ?>
 
-                            <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
+                            <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
                                 <li style="background-color: #ccc;">
-                                    <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+                                    <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                                     <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
                                     <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                                     <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
@@ -120,11 +120,11 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             ?>
 
-                            <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
+                            <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>">
                                 <li>
                                     <?php if ($isFriend) {
-                                    echo '<img src="/chicken_haven/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">'; }
-                                    else echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
+                                    echo '<img src="/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">'; }
+                                    else echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
                                     ?>
                                     <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
                                     <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
@@ -139,10 +139,10 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $stmt->execute(['user_id' => $currentUserId]);
                         $eggs = $stmt->fetchColumn();
                         ?>
-                            <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
+                            <a href="player.php?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
 
                                 <li style="background-color: #ccc;">
-                                <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+                                <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                                 <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs)) ?> oeufs</p>
                                 <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
                                 <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
@@ -169,9 +169,9 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                             <?php $playerOnLeaderBoard = true; ?>
                             
-                            <a href="player?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
+                            <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
                                 <li style="background-color: #ccc;">
-                                    <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+                                    <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                                     <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
                                     <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                                     <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
@@ -186,12 +186,12 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             echo '<script>console.log(" isFriend2 : ' . $isFriend . '");</script>';
                             ?>
                             
-                            <a href="player?username=<?php echo htmlspecialchars($player['username']);?>">
+                            <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>">
                                 
 
                                 <li>
                                     <?php if ($isFriend) {
-                                    echo '<img src="/chicken_haven/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">';
+                                    echo '<img src="/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">';
                                     } ?>
 
                                     <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
@@ -207,9 +207,9 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $eggs_last_day = $stmt->fetchColumn();
                         ?>
 
-                            <a href="player?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
+                            <a href="player.php?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
                                 <li style="background-color: #ccc;">
-                                <?php echo '<img src="/chicken_haven/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+                                <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
                                 <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs_last_day)) ?> oeufs</p>
                                 <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
                                 <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>

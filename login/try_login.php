@@ -31,20 +31,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$user['id']]);
             }
             
-            header("Location: ../game/main/index"); // Redirige vers le jeu
+            header("Location: ../game/main/index.php"); // Redirige vers le jeu
             exit();
         } else {
             // Si les identifiants sont incorrects
-            header("Location: index?error=1");
+            header("Location: index.php?error=1");
             exit();
         }
     } else {
         // Si les champs sont vides
-        header("Location: index?error=2");
+        header("Location: index.php?error=2");
         exit();
     }
 } else {
     // Si l'accès à ce fichier se fait sans soumettre de formulaire
-    header("Location: index");
+    header("Location: index.php");
     exit();
 }

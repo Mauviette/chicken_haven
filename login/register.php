@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         // Redirige vers index avec un message de succès
-        header("Location: index?register_success=1");
+        header("Location: index.php?register_success=1");
         exit();
     }
 }
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Chicken Haven</title>
     <link rel="stylesheet" href="style.css">    
-    <link rel="icon" href="/chicken_haven/resources/images/login.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/login.png" type="image/x-icon">
 </head>
 <body>
     <div class="form-container">
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">S'inscrire</button>
         </form>
-        <p><a href="../index">Retour à la connexion</a></p>
+        <p><a href="../index.php">Retour à la connexion</a></p>
     </div>
 </body>
 </html>

@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../index");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -23,7 +23,7 @@ $currentScore = $stmt->fetchColumn();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chicken Haven</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/game.png" type="image/x-icon">
     <style>
         .egg-container {
             display: flex;
@@ -48,7 +48,7 @@ $currentScore = $stmt->fetchColumn();
     .egg {
         width: 150px;
         height: 200px;
-        background: url('/chicken_haven/resources/images/egg.png') no-repeat center center;
+        background: url('/resources/images/egg.png') no-repeat center center;
         background-size: contain;
         cursor: pointer;
     }
@@ -100,7 +100,7 @@ $currentScore = $stmt->fetchColumn();
         position: absolute;
         width: 20px;
         height: 20px;
-        background: url('/chicken_haven/resources/images/egg_fragment.png') no-repeat center center;
+        background: url('/resources/images/egg_fragment.png') no-repeat center center;
         background-size: cover;
         pointer-events: none; /* Empêche les fragments d'intercepter les clics */
         animation: fall 2s ease-out forwards;

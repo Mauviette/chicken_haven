@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('Location: /chicken_haven/index');
+    header('Location: /index.php');
     exit();
 }
 
@@ -11,7 +11,7 @@ $username = $_GET['username'];
 
 if ($username == $_SESSION['username']) {
     echo("<script>console.log('Viewing own profile');</script>");
-    header('Location: /chicken_haven/game/my_profile/index');
+    header('Location: /game/my_profile/index.php');
     exit();
 }
 
@@ -59,47 +59,49 @@ if ($user) {
 
     <?php require_once "../bars.php"; ?>
 
-    <div class="form-container">
-        <h1>Profil de <?php echo htmlspecialchars($displayname); ?></h1>
-        <p><strong><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
-        <img src="<?php echo getProfilePicture($targetUserId);?>" alt="Profil" class="profile-icon-big">
-        <br><br>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Profil de <?php echo htmlspecialchars($displayname); ?></h1>
+            <p><strong><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
+            <img src="<?php echo getProfilePicture($targetUserId);?>" alt="Profil" class="profile-icon-big">
+            <br><br>
 
-        <?php if (!$relation): ?>
-            <!-- Bouton pour envoyer une demande d'ami -->
-            <form action="/chicken_haven/game/social/friend/add_friend.php" method="post" class="no-display">
-                <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-                <button type="submit">Ajouter en ami</button>
-            </form>
-        <?php elseif (!$relation['accepted'] && $relation['user1_id'] == $currentUserId): ?>
-            <!-- Bouton pour annuler une demande envoyée -->
-            <form action="/chicken_haven/game/social/friend/cancel_request.php" method="post" class="no-display">
-                <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-                <button type="submit">Annuler la demande</button>
-            </form>
-        <?php elseif (!$relation['accepted'] && $relation['user2_id'] == $currentUserId): ?>
-            <!-- Boutons pour accepter ou refuser une demande reçue -->
-            <form action="/chicken_haven/game/social/friend/accept_request.php" method="post" class="no-display">
-                <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-                <button type="submit">Accepter la demande</button>
-            </form>
-            <form action="/chicken_haven/game/social/friend/decline_request.php" method="post" class="no-display">
-                <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-                <button type="submit">Refuser la demande</button>
-            </form>
-        <?php elseif ($relation['accepted']): ?>
-            <!-- Bouton pour supprimer un ami -->
-            <form action="/chicken_haven/game/social/friend/remove_friend.php" method="post" class="no-display">
-                <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-                <button type="submit">Supprimer des amis</button>
-            </form>
-        <?php endif; ?>
+            <?php if (!$relation): ?>
+                <!-- Bouton pour envoyer une demande d'ami -->
+                <form action="/game/social/friend/add_friend.php" method="post" class="no-display">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <button type="submit">Ajouter en ami</button>
+                </form>
+            <?php elseif (!$relation['accepted'] && $relation['user1_id'] == $currentUserId): ?>
+                <!-- Bouton pour annuler une demande envoyée -->
+                <form action="/game/social/friend/cancel_request.php" method="post" class="no-display">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <button type="submit">Annuler la demande</button>
+                </form>
+            <?php elseif (!$relation['accepted'] && $relation['user2_id'] == $currentUserId): ?>
+                <!-- Boutons pour accepter ou refuser une demande reçue -->
+                <form action="/game/social/friend/accept_request.php" method="post" class="no-display">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <button type="submit">Accepter la demande</button>
+                </form>
+                <form action="/game/social/friend/decline_request.php" method="post" class="no-display">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <button type="submit">Refuser la demande</button>
+                </form>
+            <?php elseif ($relation['accepted']): ?>
+                <!-- Bouton pour supprimer un ami -->
+                <form action="/game/social/friend/remove_friend.php" method="post" class="no-display">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <button type="submit">Supprimer des amis</button>
+                </form>
+            <?php endif; ?>
 
-        <br>
+            <br>
 
-        <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
+            <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
 
-        <br><br>
+            <br><br>
+        </div>
     </div>
 </body>
 </html>

@@ -49,7 +49,7 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Poules - Chicken Haven</title>
-    <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/game.png" type="image/x-icon">
     <link rel="stylesheet" href="../main/style.css">
 </head>
 <body>
@@ -80,9 +80,9 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                     $chicken = reset($chicken);
                     ?>
                     <div class="nest-slot" style="position: relative;">
-                        <img src="/chicken_haven/resources/images/chicken_nest.png" alt="Nid <?php echo $slot; ?>" class="nest-image">
+                        <img src="/resources/images/chicken_nest.png" alt="Nid <?php echo $slot; ?>" class="nest-image">
                             <?php if ($chicken): ?>
-                                <img src="/chicken_haven/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>" class="chicken-on-nest" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; cursor: pointer;" onclick="showChickenDetails('<?php echo htmlspecialchars($chicken['name']); ?>', '/chicken_haven/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png', '<?php echo htmlspecialchars($chicken['rarity']); ?>', '<?php echo htmlspecialchars($chicken['id']); ?>')">
+                                <img src="/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>" class="chicken-on-nest" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; cursor: pointer;" onclick="showChickenDetails('<?php echo htmlspecialchars($chicken['name']); ?>', '/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png', '<?php echo htmlspecialchars($chicken['rarity']); ?>', '<?php echo htmlspecialchars($chicken['id']); ?>')">
                             <?php endif; ?>
                     </div>
                 
@@ -100,17 +100,17 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                         <div class="chicken-card <?php echo htmlspecialchars($chicken['rarity']); ?>">
                             <div class="button-container">
                                 <a href="#" class="plus-button">
-                                    <img src="/chicken_haven/resources/images/plus.png" alt="Plus">
+                                    <img src="/resources/images/plus.png" alt="Plus">
                                 </a>
                                 <span class="tooltip">
                                     <a href="#" class="more-button">
-                                        <img src="/chicken_haven/resources/images/more.png" alt="More">
+                                        <img src="/resources/images/more.png" alt="More">
                                         <span class="tooltip-text"><?php echo htmlspecialchars($chicken['effect']); ?></span>
                                     </a>
                                 </span>
                             </div>
 
-                            <img src="/chicken_haven/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>">
+                            <img src="/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>">
                             <p><?php echo htmlspecialchars($chicken['name']); ?> (x<?php echo $chicken['count']; ?>)</p>
                             <span class="chicken-effect" style="display: none;"><?php echo htmlspecialchars($chicken['effect']); ?></span>
                             <span class="chicken-id" style="display: none;"><?php echo htmlspecialchars($chicken['id']); ?></span>
@@ -127,7 +127,7 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                 <?php else: ?>
                     <?php foreach ($missingChickens as $chicken): ?>
                         <div class="chicken-card missing <?php echo htmlspecialchars($chicken['rarity']); ?>">
-                            <img src="/chicken_haven/resources/images/chickens/mystery.png" alt="Poule mystère">
+                            <img src="/resources/images/chickens/mystery.png" alt="Poule mystère">
                             <p>???</p>
                             <span class="rarity-label"><?php echo ucfirst($chicken['rarity']); ?></span>
                         </div>
@@ -413,6 +413,35 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                 existingChicken.remove();
             }
         }
+
+        // Ajouter la poule sur le nid correspondant sur la sidebar de droite (juste besoin de l'image et de l'alt), retirer la poule si elle est déjà dans un autre emplacement et retirer la poule qui était dans le slot (modifier ou créer "chicken-on-nest-side", dans le nid "nest-slot-side", le tout est dans "incubator-container-side")
+        // Retirer la poule si elle est déjà dans un autre emplacement sur la sidebar de droite
+        document.querySelectorAll('.chicken-on-nest-side').forEach(img => {
+            if (img.src === chickenImage) {
+                img.parentNode.removeChild(img);
+            }
+        });
+
+        // Retirer la poule qui était dans le slot sur la sidebar de droite
+        const nestSlotSide = document.querySelectorAll('.nest-slot-side')[slot - 1];
+        if (nestSlotSide) {
+            const existingChickenSide = nestSlotSide.querySelector('img.chicken-on-nest-side');
+            if (existingChickenSide) {
+                existingChickenSide.remove();
+            }
+        }
+
+        // Ajouter la nouvelle poule sur la sidebar de droite
+        const chickenSide = document.createElement('img');
+        chickenSide.src = chickenImage;
+        chickenSide.alt = chickenName;
+        chickenSide.classList.add('chicken-on-nest-side');
+        chickenSide.style.position = 'absolute';
+        chickenSide.style.top = '0';
+        chickenSide.style.left = '0';
+
+        nestSlotSide.appendChild(chickenSide);
+
 
         // Ajouter la nouvelle poule
         const chicken = document.createElement('img');

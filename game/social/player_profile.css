@@ -83,7 +83,7 @@ text-align: center; /* Centre le texte à l'intérieur */
 }
 
 body {
-  background-image: url('../../resources/images/background/login_bg.jpg');
+  background-image: url('/resources/images/background/login_bg.jpg');
   background-position: center;
   background-attachment: fixed;
   background-size:13%;
@@ -246,7 +246,7 @@ text-align: center; /* Centre le texte à l'intérieur */
 }
 
 body {
-background-image: url('../../resources/images/background/login_bg.jpg');
+background-image: url('/resources/images/background/login_bg.jpg');
 background-position: center;
 background-attachment: fixed;
 background-size:13%;
@@ -361,11 +361,11 @@ float: right;
 }
 
 .accept-button {
-background-image: url('/chicken_haven/resources/images/accept.png');   
+background-image: url('/resources/images/accept.png');   
 }
 
 .reject-button {
-background-image: url('/chicken_haven/resources/images/reject.png');
+background-image: url('/resources/images/reject.png');
 }
 
 .friends-list a {
@@ -460,7 +460,7 @@ text-align: center; /* Centre le texte à l'intérieur */
 }
 
 body {
-  background-image: url('../../resources/images/background/login_bg.jpg');
+  background-image: url('/resources/images/background/login_bg.jpg');
   background-position: center;
   background-attachment: fixed;
   background-size:13%;

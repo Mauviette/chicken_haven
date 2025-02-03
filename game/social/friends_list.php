@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../index");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -44,7 +44,7 @@ $friends = $friendsStmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste d'amis - Chicken Haven</title>
     <link rel="stylesheet" href="../main/style.css">
-    <link rel="icon" href="/chicken_haven/resources/images/game.png" type="image/x-icon">
+    <link rel="icon" href="/resources/images/game.png" type="image/x-icon">
 </head>
 <body>
 
@@ -58,7 +58,7 @@ $friends = $friendsStmt->fetchAll();
         <?php if (!empty($friends)): ?>
             <ul class="friends-list">
                 <?php foreach ($friends as $friend): ?>
-                    <a href="player?username=<?php echo htmlspecialchars($friend['username']);?>" style="no-link">
+                    <a href="player.php?username=<?php echo htmlspecialchars($friend['username']);?>" style="no-link">
                     <li>
                             <img src="<?php echo getProfilePicture($friend['id']);?>" alt="Icone joueur" class="player-icon">
                         <strong><?php echo htmlspecialchars($friend['displayname']); ?></strong> @<?php echo htmlspecialchars($friend['username']); ?>
@@ -76,7 +76,7 @@ $friends = $friendsStmt->fetchAll();
         <?php if (!empty($pendingRequests)): ?>
             <ul class="friends-list">
                 <?php foreach ($pendingRequests as $request): ?>
-                    <a href="player?username=<?php echo htmlspecialchars($request['username']);?>">
+                    <a href="player.php?username=<?php echo htmlspecialchars($request['username']);?>">
                     <li>
                         <img src="<?php echo getProfilePicture($request['id']);?>" alt="Icone joueur" class="player-icon">
                         <strong style="margin : 10px;"><?php echo htmlspecialchars($request['displayname']); ?></strong> @<?php echo htmlspecialchars($request['username']); ?>
@@ -114,7 +114,7 @@ $friends = $friendsStmt->fetchAll();
     <?php if (!empty($sentRequests)): ?>
         <ul class="friends-list">
             <?php foreach ($sentRequests as $request): ?>
-                <a href="player?username=<?php echo htmlspecialchars($request['username']);?>">
+                <a href="player.php?username=<?php echo htmlspecialchars($request['username']);?>">
                 <li>
                     <img src="<?php echo getProfilePicture($request['id']);?>" alt="Icone joueur" class="player-icon">
                     <strong style="margin : 10px;"><?php echo htmlspecialchars($request['displayname']); ?></strong> @<?php echo htmlspecialchars($request['username']); ?>

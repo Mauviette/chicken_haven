@@ -56,12 +56,6 @@ CREATE TABLE user_chickens (
     UNIQUE(user_id, chicken_id)
 );
 
-INSERT INTO chickens (name, image_url, rarity, effect, multiplier) VALUES
-("Poule rousse", 'red', 'common', "+1 oeuf par clic pour chaque poule rousse.", 1),
-("Poule noire", 'black', 'common', "+0.1 oeuf par seconde pour chaque poule noire.", 0.1),
-("Poule blanche", 'white', 'rare', "Chance de faire apparaitre un oeuf blanc sur l'écran. \nCliquer sur l'oeuf blanc donne 100 oeufs pour chaque poule blanche.", 100),
-("Canard", 'duck', 'epic', "+1 oeuf par seconde pour chaque canard.", 1);
-
 CREATE TABLE incubators (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -72,3 +66,49 @@ CREATE TABLE incubators (
     UNIQUE (user_id, slot_number) -- Un utilisateur ne peut pas avoir deux fois le même emplacement
 );
 
+CREATE TABLE openable_eggs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    buyable BOOLEAN NOT NULL DEFAULT 1,
+    price INT NOT NULL DEFAULT 0,
+    limited BOOLEAN NOT NULL DEFAULT 0,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
+    probability_common FLOAT NOT NULL DEFAULT 0.70,
+    probability_rare FLOAT NOT NULL DEFAULT 0.22,
+    probability_epic FLOAT NOT NULL DEFAULT 0.07,
+    probability_legendary FLOAT NOT NULL DEFAULT 0.01
+);
+
+CREATE TABLE egg_contents (
+    egg_id INT NOT NULL,
+    chicken_id INT NOT NULL,
+    PRIMARY KEY (egg_id, chicken_id),
+    FOREIGN KEY (egg_id) REFERENCES openable_eggs(id) ON DELETE CASCADE,
+    FOREIGN KEY (chicken_id) REFERENCES chickens(id) ON DELETE CASCADE,
+    rarity ENUM('common', 'rare', 'epic', 'legendary') NOT NULL
+);
+
+-- Exemple d'ajout d'une poule à un utilisateur
+--INSERT INTO user_chickens (user_id, chicken_id) VALUES (1, 1) ON DUPLICATE KEY UPDATE count = count + 1;
+
+/* Ajout des poules */
+INSERT INTO chickens (name, image_url, rarity, effect, multiplier) VALUES
+("Poule rousse", 'red', 'common', "+1 oeuf par clic pour chaque poule rousse.", 1),
+("Poule noire", 'black', 'common', "+0.1 oeuf par seconde pour chaque poule noire.", 0.1),
+("Poule blanche", 'white', 'rare', "Chance de faire apparaitre un oeuf blanc sur l'écran. \nCliquer sur l'oeuf blanc donne 100 oeufs pour chaque poule blanche.", 100),
+("Canard", 'duck', 'epic', "+1 oeuf par seconde pour chaque canard.", 1);
+
+
+/* Ajout des oeufs */
+
+-- Oeuf argenté
+INSERT INTO openable_eggs (name, image_url, price, probability_common, probability_rare, probability_epic, probability_legendary) VALUES
+("Oeuf argenté", 'silver_egg', 100, 0.70, 0.22, 0.07, 0.0);
+
+INSERT INTO egg_contents (egg_id, chicken_id, rarity) VALUES
+(1, 1, 'common'),
+(1, 2, 'common'),
+(1, 3, 'rare'),
+(1, 4, 'epic');

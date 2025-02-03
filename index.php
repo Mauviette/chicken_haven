@@ -2,7 +2,7 @@
 
 if (!isset($_SESSION['username']))
 {
-    header("Location: login/index");
+    header("Location: login/index.php");
 } else {
-    header("Location: game/main/index");
+    header("Location: game/main/index.php");
 }

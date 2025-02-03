@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header('Location: /chicken_haven/index');
+    header('Location: /index.php');
     exit();
 }
 
@@ -23,5 +23,5 @@ $targetUserId = $stmt->fetchColumn();
 $updateStmt = $pdo->prepare('UPDATE friends SET accepted = 1 WHERE user1_id = :targetUser AND user2_id = :currentUser AND accepted = 0');
 $updateStmt->execute(['targetUser' => $targetUserId, 'currentUser' => $currentUserId]);
 
-header('Location: ../player?username=' . urlencode($targetUsername));
+header('Location: ../player.php?username=' . urlencode($targetUsername));
 exit();

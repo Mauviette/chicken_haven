@@ -8,7 +8,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #f4f4f4;
-  background-image: url('../../resources/images/background/login_bg.jpg');
+  background-image: url('/resources/images/background/login_bg.jpg');
   background-position: center;
   background-attachment: fixed;
   background-size: 13%;
@@ -140,6 +140,8 @@ a:hover {
   color: white;
   padding: 10px;
   z-index: 999;
+  display: flex;
+  justify-content: center;
 }
 
 .sidebar {
@@ -150,7 +152,6 @@ a:hover {
 .sidebar-right {
   right: 0;
   width: 12.5%;
-  max-width: 12.5%;
 }
 
 .sidebar ul, .sidebar-right ul {
@@ -219,15 +220,15 @@ a:hover {
 }
 
 .accept-button {
-  background-image: url('/chicken_haven/resources/images/accept.png');
+  background-image: url('/resources/images/accept.png');
 }
 
 .reject-button {
-  background-image: url('/chicken_haven/resources/images/reject.png');
+  background-image: url('/resources/images/reject.png');
 }
 
 .cancel-button {
-  background-image: url('/chicken_haven/resources/images/reject.png');
+  background-image: url('/resources/images/reject.png');
 }
 
 .session-section {
@@ -297,9 +298,6 @@ a:hover {
   background-color: #fff;
 }
 
-.incubator-container-side {
-}
-
 .nest-slot-side {
   position: relative;
   width: 50px;
@@ -316,8 +314,12 @@ a:hover {
   position: absolute;
   top: -20px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateY(-37%);
   width: 40px;
   height: 40px;
 }
 
+
+.incubator-container-side {
+  margin-top: 10px;
+}
