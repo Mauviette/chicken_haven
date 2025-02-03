@@ -92,7 +92,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 border-radius: 10px;
                 background-color: #fff;" >
 
-            <h2>Podium</h2>
+            <h2>Podium (total d'oeufs)</h2>
 
             <?php if (!empty($best_players)): ?>
                 <ul class="friends-list" style="justify-content: space-between;">
@@ -157,7 +157,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
             <div class="friends-section">
-            <h2>Podium (dernières 24 heures)</h2>
+            <h2>Podium (gains des dernières 24 heures)</h2>
             <?php if (!empty($best_players_last_day)): ?>
                 <ul class="friends-list" style="justify-content: space-between;">
                     <?php $playerOnLeaderBoard = false; ?>
@@ -192,7 +192,9 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <li>
                                     <?php if ($isFriend) {
                                     echo '<img src="/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">';
-                                    } ?>
+                                    }
+                                    else echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
+                                    ?>
 
                                     <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_last_day'])) ?> oeufs</p>
                                     <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
