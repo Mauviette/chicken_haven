@@ -78,7 +78,6 @@ echo '<!-- Barre de navigation -->
         </section>';
 
 echo '
-        <li><a href="/scripts/logout.php">Déconnexion</a></li>
     </ul>
 </div>';
 

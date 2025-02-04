@@ -25,42 +25,42 @@ p {
 /* Formulaires */
 form:not(.no-display) {
   width: 35%;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  margin: 2% auto;
+  padding: 2%;
+  border: 0.1% solid #ccc;
+  border-radius: 1%;
   background-color: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.4% 1% rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-.form-container
-{
+.form-container {
   width: 100%;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 2%;
+  border: 0.1% solid #ccc;
+  border-radius: 1%;
   background-color: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.4% 1% rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  font-size: 100%
 }
 
-.main-container
-{
+.main-container {
+  max-width: 50%;
 }
 
 input[type="text"], input[type="password"], input[type="submit"] {
   width: 80%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 1%;
+  margin: 1% 0;
+  border: 0.1% solid #ccc;
+  border-radius: 0.5%;
 }
 
 input[type="submit"] {
@@ -95,13 +95,13 @@ a:hover {
   align-items: center;
   background-color: #333;
   color: white;
-  padding: .75%;
+  padding: 0.75%;
   position: fixed;
   width: 100%;
   top: 0;
   right: 0;
   z-index: 1000;
-  height: 50px;
+  height: 5%;
 }
 
 .profile-section, .profile-link {
@@ -117,18 +117,18 @@ a:hover {
 }
 
 .profile-icon {
-  width: 32px;
-  height: 32px;
-  margin: 0 10px 0 30px;
+  width: 25%;
+  height: 25%;
+  margin: 0 10% 0 20%;
 }
 
 .profile-icon-big {
-  width: 80px;
-  height: 80px;
+  width: 16%;
+  height: 16%;
 }
 
 .username {
-  font-size: 16px;
+  font-size: 80%;
 }
 
 /* Sidebar */
@@ -138,10 +138,11 @@ a:hover {
   height: 100%;
   background-color: #444;
   color: white;
-  padding: 10px;
+  padding: 1%;
   z-index: 999;
   display: flex;
   justify-content: center;
+  font-size : 100%
 }
 
 .sidebar {
@@ -157,11 +158,11 @@ a:hover {
 .sidebar ul, .sidebar-right ul {
   list-style: none;
   padding: 0;
-  margin-top: 85px;
+  margin-top: 30%;
 }
 
 .sidebar li, .sidebar-right li {
-  margin: 25px 0;
+  margin: 20% 0;
 }
 
 .sidebar a, .sidebar-right a {
@@ -190,16 +191,16 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 0;
+  margin: 1% 0;
   background-color: #f4f4f4;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1%;
+  border-radius: 0.8%;
+  box-shadow: 0 0.2% 0.5% rgba(0, 0, 0, 0.1);
 }
 
 .player-icon {
-  width: 40px;
-  height: 40px;
+  width: 8%;
+  height: 8%;
   border-radius: 50%;
 }
 
@@ -215,7 +216,7 @@ a:hover {
   cursor: pointer;
   background-size: cover;
   background-color: transparent;
-  margin-left: 5px;
+  margin-left: 0.5%;
   float: right;
 }
 
@@ -235,8 +236,7 @@ a:hover {
   margin-left: auto;
 }
 
-
-  /* Styles pour la popup et l'overlay */
+/* Styles pour la popup et l'overlay */
 .popup {
   display: none;
   position: fixed;
@@ -245,18 +245,18 @@ a:hover {
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 20px;
-  border: 1px solid #888;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  padding: 2%;
+  border: 0.1% solid #888;
+  box-shadow: 0 0.5% 1.5% rgba(0,0,0,0.3);
   text-align: center;
   width: 40%;
-  }
+}
 
 .popup .close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
+  top: 1%;
+  right: 1%;
+  font-size: 2%;
   cursor: pointer;
 }
 
@@ -267,9 +267,9 @@ a:hover {
 }
 
 .profile-icon-option {
-  width: 100px;
-  height: 100px;
-  margin: 10px;
+  width: 10%;
+  height: 10%;
+  margin: 1%;
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -291,19 +291,19 @@ a:hover {
 
 .friends-section {
   width: 90%;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  margin: 2% auto;
+  padding: 2%;
+  border: 0.1% solid #ccc;
+  border-radius: 1%;
   background-color: #fff;
 }
 
 .nest-slot-side {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 5%;
+  height: 5%;
   display: inline-block; 
-  margin: 10px;
+  margin: 1%;
 }
 
 .nest-image-side {
@@ -312,14 +312,13 @@ a:hover {
 
 .chicken-on-nest-side {
   position: absolute;
-  top: -20px;
+  top: -2%;
   left: 50%;
-  transform: translateY(-37%);
-  width: 40px;
-  height: 40px;
+  transform: translate(10%, -33%);
+  width: 4%;
+  height: 4%;
 }
 
-
 .incubator-container-side {
-  margin-top: 10px;
+  margin-top: 1%;
 }
