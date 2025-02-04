@@ -61,6 +61,9 @@ function spawnWhiteEgg() {
             whiteEgg.style.left = Math.random() * window.innerWidth + 'px';
             whiteEgg.style.top = Math.random() * window.innerHeight + 'px';
 
+            //orientation aléatoire
+            whiteEgg.style.transform = `rotate(${Math.random() * 360}deg)`;
+
             document.body.appendChild(whiteEgg);
 
             // Ajouter l'event listener pour cliquer sur l'œuf
