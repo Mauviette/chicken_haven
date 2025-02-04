@@ -13,6 +13,13 @@ if (!$user_id) {
 $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $user_id]);
 $eggs = $stmt->fetchColumn();
+
+
+// Récupérer les œufs ouvrables
+$stmt = $pdo->prepare('SELECT id, name, image_url, price, buyable, probability_common, probability_rare, probability_epic, probability_legendary FROM openable_eggs WHERE limited = 0');
+$stmt->execute();
+$openable_eggs = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -36,9 +43,9 @@ $eggs = $stmt->fetchColumn();
         <p>Vous avez actuellement <strong><?php echo $eggs; ?></strong> œufs.</p>
         
         <div class="egg-shop">
-        <?php foreach ($eggs as $egg): ?>
+        <?php foreach ($openable_eggs as $egg): ?>
             <div class="egg-item">
-                <img src="/chicken_haven/resources/images/eggs/<?php echo htmlspecialchars($egg['image_url']); ?>.png" alt="<?php echo htmlspecialchars($egg['name']); ?>">
+                <img class="egg-display" src="/resources/images/eggs/<?php echo htmlspecialchars($egg['image_url']); ?>.png" alt="<?php echo htmlspecialchars($egg['name']); ?>">
                 <p><?php echo htmlspecialchars($egg['name']); ?></p>
                 <p>Prix : <?php echo $egg['price']; ?> œufs</p>
                 <button onclick="buyEgg(<?php echo $egg['id']; ?>, <?php echo $egg['price']; ?>)">Acheter</button>
@@ -51,20 +58,4 @@ $eggs = $stmt->fetchColumn();
 </body>
 
 <script>
-document.getElementById('buySilverEggBtn').addEventListener('click', function () {
-    fetch('buy_silver_egg.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: <?php echo json_encode($user_id); ?> })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('marketMessage').innerText = "Vous avez obtenu : " + data.chicken_name;
-        } else {
-            document.getElementById('marketMessage').innerText = "Erreur : " + data.message;
-        }
-    })
-    .catch(error => console.error('Erreur:', error));
-});
 </script>

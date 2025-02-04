@@ -57,7 +57,7 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
     <?php require_once "../bars.php"; ?>
 
     
-    <div class="main-container" style="margin-top: 250px;">
+    <div class="main-container" style="margin-top: 25%; width: 40%;">
         <div class="form-container">
             <h1>🪹Couvoir</h1>
             <div class="nest-container">
@@ -460,8 +460,8 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
         };
 
         nestSlot.appendChild(chicken);
+        fetchEggRate();
     }
-
 </script>
 
 

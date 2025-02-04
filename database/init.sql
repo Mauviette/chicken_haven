@@ -34,10 +34,16 @@ CREATE TABLE scores (
     user_id INT NOT NULL,
     eggs BIGINT NOT NULL,
     eggs_last_day BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    eggs_earned_total BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    eggs_after_decimal FLOAT NOT NULL DEFAULT 0
 );
+--ALTER TABLE scores ADD COLUMN eggs_after_decimal FLOAT NOT NULL DEFAULT 0;
+--ALTER TABLE scores ADD COLUMN eggs_earned_total BIGINT NOT NULL DEFAULT 0;
+
 
 CREATE TABLE friends (
+
     user1_id INT NOT NULL,
     user2_id INT NOT NULL,
     PRIMARY KEY (user1_id, user2_id),
@@ -95,9 +101,9 @@ CREATE TABLE egg_contents (
 
 /* Ajout des poules */
 INSERT INTO chickens (name, image_url, rarity, effect, multiplier) VALUES
-("Poule rousse", 'red', 'common', "+1 oeuf par clic pour chaque poule rousse.", 1),
+("Poule rousse", 'red', 'common', "+0.5 oeuf par clic pour chaque poule rousse.", 0.5),
 ("Poule noire", 'black', 'common', "+0.1 oeuf par seconde pour chaque poule noire.", 0.1),
-("Poule blanche", 'white', 'rare', "Chance de faire apparaitre un oeuf blanc sur l'écran. \nCliquer sur l'oeuf blanc donne 100 oeufs pour chaque poule blanche.", 100),
+("Poule blanche", 'white', 'rare', "Chance de faire apparaitre un oeuf blanc sur l'écran. \nCliquer sur l'oeuf blanc donne 50 oeufs pour chaque poule blanche.", 50),
 ("Canard", 'duck', 'epic', "+1 oeuf par seconde pour chaque canard.", 1);
 
 

@@ -128,7 +128,7 @@ a:hover {
 }
 
 .username {
-  font-size: 80%;
+  font-size: 90%;
 }
 
 /* Sidebar */
@@ -158,7 +158,7 @@ a:hover {
 .sidebar ul, .sidebar-right ul {
   list-style: none;
   padding: 0;
-  margin-top: 30%;
+  margin-top: 25%;
 }
 
 .sidebar li, .sidebar-right li {
@@ -300,10 +300,10 @@ a:hover {
 
 .nest-slot-side {
   position: relative;
-  width: 5%;
-  height: 5%;
+  width: 50px;
+  height: 50px;
   display: inline-block; 
-  margin: 1%;
+  margin: 10px;
 }
 
 .nest-image-side {
@@ -312,13 +312,149 @@ a:hover {
 
 .chicken-on-nest-side {
   position: absolute;
-  top: -2%;
+  top: -20px;
   left: 50%;
   transform: translate(10%, -33%);
-  width: 4%;
-  height: 4%;
+  width: 40px;
+  height: 40px;
 }
 
 .incubator-container-side {
-  margin-top: 1%;
+  margin-top: 25%;
+}
+
+.egg-shop {
+  width: 100%;
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.egg-shop a {
+  text-decoration: none;
+  color: #333;
+}
+
+.egg-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1% 0;
+  background-color: #f4f4f4;
+  padding: 1%;
+  border-radius: 0.8%;
+  box-shadow: 0 0.2% 0.5% rgba(0, 0, 0, 0.1);
+}
+
+.egg-display {
+  width: 10%;
+  height: 10%;
+}
+
+
+.egg-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.score {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+@keyframes bounce {
+0% { transform: scale(1); }
+50% { transform: scale(1.2); }
+100% { transform: scale(1); }
+} 
+
+.egg {
+width: 150px;
+height: 200px;
+background: url('/resources/images/egg.png') no-repeat center center;
+background-size: contain;
+cursor: pointer;
+}
+
+.egg.bounce {
+animation: bounce 0.25s ease-in-out;
+}
+
+
+@keyframes fall {
+0% {
+  transform: translate(0, 0) rotate(var(--start-rotation));
+  opacity: 1;
+}
+30% {
+  transform: translate(calc(var(--random-x) * 30px), -30px) rotate(calc(var(--start-rotation) + 45deg));
+}
+100% {
+  transform: translate(calc(var(--random-x) * 100px), 200px) rotate(calc(var(--start-rotation) + 360deg));
+  opacity: 0;
+}
+}
+
+.floating-text {
+position: absolute;
+font-size: 20px;
+font-weight: bold;
+color: #ffcc00;
+text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+opacity: 1;
+animation: flyUp 1.5s ease-out forwards;
+pointer-events: none;
+user-select: none;
+}
+
+@keyframes flyUp {
+0% {
+  transform: translateY(0);
+  opacity: 1;
+}
+100% {
+  transform: translateY(-75px);
+  opacity: 0;
+}
+}
+
+
+.egg-fragment {
+position: absolute;
+width: 20px;
+height: 20px;
+background: url('/resources/images/egg_fragment.png') no-repeat center center;
+background-size: cover;
+pointer-events: none; /* Empêche les fragments d'intercepter les clics */
+animation: fall 2s ease-out forwards;
+}
+
+@keyframes egg-explosion {
+  0% {
+      transform: scale(1);
+      opacity: 1;
+  }
+  50% {
+      transform: scale(2);
+      opacity: 0.5;
+  }
+  100% {
+      transform: scale(3);
+      opacity: 0;
+  }
+}
+
+.egg-explosion {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  animation: egg-explosion 0.5s ease-out forwards;
+  pointer-events: none;
 }

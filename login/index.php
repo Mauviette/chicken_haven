@@ -52,11 +52,11 @@ session_start();
 
             <form method="POST" action="try_login.php" class="form">
                 <div>
-                    <label for="username">Nom d'utilisateur :</label><br>
+                    <label for="username">Nom d'utilisateur</label><br>
                     <input type="text" name="username" id="username" required>
                 </div>
                 <div>
-                    <label for="password">Mot de passe :</label><br>
+                    <label for="password">Mot de passe</label><br>
                     <input type="password" name="password" id="password" required>
                 </div>
                 <button type="submit">Se connecter</button>

@@ -67,7 +67,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if ($nbPendingRequests > 0) echo '<span style="color: gold;">(' . htmlspecialchars($nbPendingRequests) . ')</span>';?>
             </a>
 
-            <form action="search_player" method="post">
+            <form action="search_player.php" method="post">
 
             <?php if (isset($_GET['error'])): ?>
                 <p class="error" style="color: red; font-weight: bold;">
@@ -116,7 +116,6 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE ((user1_id = :current_user_id AND user2_id = :player_id) OR (user1_id = :player_id AND user2_id = :current_user_id)) AND accepted = 1');
                             $stmt->execute(['current_user_id' => $currentUserId, 'player_id' => $player['id']]);
                             $isFriend = $stmt->fetchColumn() > 0;
-                            echo '<script>console.log(" isFriend : ' . $isFriend . '");</script>';
 
                             ?>
 
@@ -183,7 +182,6 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE ((user1_id = :current_user_id AND user2_id = :player_id) OR (user1_id = :player_id AND user2_id = :current_user_id)) AND accepted = 1');
                             $stmt->execute(['current_user_id' => $currentUserId, 'player_id' => $player['id']]);
                             $isFriend = $stmt->fetchColumn() > 0;
-                            echo '<script>console.log(" isFriend2 : ' . $isFriend . '");</script>';
                             ?>
                             
                             <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>">

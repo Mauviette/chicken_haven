@@ -23,6 +23,21 @@ $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $incubatorChickens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
+//Calculer les poulets par seconde
+
+// Récupérer le nombre de poules noires en couveuse
+$stmt = $pdo->prepare("
+    SELECT COUNT(*) FROM incubators 
+    INNER JOIN chickens ON incubators.chicken_id = chickens.id
+    WHERE incubators.user_id = :user_id AND chickens.name = 'Poule noire'
+");
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$blackChickenCount = $stmt->fetchColumn();
+
+// Calculer l'augmentation des œufs par seconde
+$eggsPerSecond = 0.1 * $blackChickenCount;
+
+
 
 echo '<!-- Barre de navigation -->
     <div class="navbar">
@@ -91,17 +106,8 @@ echo '
   
 
 ?>
+<script src="/scripts/eggs_per_second.js"></script>
+<script src="/scripts/update_session.js">
 
 <script>
-    function updateSession() {
-        fetch('/scripts/update_session.php')
-            .then(response => response.text())
-            .then(data => console.log('Session mise à jour'));
-    }
-
-    // Met à jour toutes les 30 secondes
-    setInterval(updateSession, 30000);
-
-    // Appel initial dès le chargement de la page
-    updateSession();
 </script>
