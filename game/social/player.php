@@ -43,6 +43,11 @@ if ($user) {
     $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
     $stmt->execute(['user_id' => $targetUserId]);
     $eggs = $stmt->fetchColumn();
+    
+    // Vérifier si l'utilisateur est un tricheur
+    $stmt = $pdo->prepare('SELECT cheater FROM users WHERE id = :user_id');
+    $stmt->execute(['user_id'=> $targetUserId]);
+    $cheater = $stmt->fetchColumn();
 }
 ?>
 
@@ -64,7 +69,12 @@ if ($user) {
             <h1>Profil de <?php echo htmlspecialchars($displayname); ?></h1>
             <p><strong><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
             <img src="<?php echo getProfilePicture($targetUserId);?>" alt="Profil" class="profile-icon-big">
+            <p style="color: red;"><b>Tricheur</b></p>
+
             <br><br>
+
+            <?php if ($cheater): ?>
+            <?php endif; ?>
 
             <?php if (!$relation): ?>
                 <!-- Bouton pour envoyer une demande d'ami -->

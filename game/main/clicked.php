@@ -1,27 +1,73 @@
 <?php
 session_start();
+require_once '../../database/db_connect.php';
 
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false]);
+    echo json_encode(['success' => false, 'error' => 'Not logged in']);
     exit();
 }
 
-require_once '../../database/db_connect.php';
-
 $user_id = $_SESSION['user_id'];
 $base_increment = 1;
+$clickCooldown = 160; // Temps minimum entre deux clics (ms)
+$maxClicksPerSecond = 20; // Limite des clics par seconde
+$now = microtime(true);
 
-//Mettre $bonus à eggs_after_decimal
+// Vérifier si l'utilisateur spamme les clics
+if (isset($_SESSION['last_click_time'])) {
+    $timeSinceLastClick = ($now - $_SESSION['last_click_time']) * 1000; // Convertir en ms
+    
+    if ($timeSinceLastClick < $clickCooldown) {
+        echo json_encode(['success' => false, 'error' => 'Click too fast']);
+        exit();
+    }
+}
+$_SESSION['last_click_time'] = $now;
+
+// Vérifier le nombre de clics par seconde
+if (!isset($_SESSION['clicks_per_second'])) {
+    $_SESSION['clicks_per_second'] = 0;
+    $_SESSION['first_click_time'] = $now;
+}
+$_SESSION['clicks_per_second']++;
+
+if ($now - $_SESSION['first_click_time'] >= 1) {
+    $_SESSION['clicks_per_second'] = 0;
+    $_SESSION['first_click_time'] = $now;
+}
+
+
+$stmt = $pdo->prepare('SELECT cheater FROM users WHERE id = :user_id');
+$stmt->execute(['user_id' => $user_id]);
+$cheating = $stmt->fetchColumn();
+
+
+if ($_SESSION['clicks_per_second'] > $maxClicksPerSecond && $cheating == 0) {
+    // Appeler /scripts/alert_cheating.php
+    require_once '../../scripts/alert_cheating.php';
+
+
+    if ($cheating == 1) {
+        echo json_encode(['success'=> false, 'error' => 'Cheating detected, already alerted']);
+        exit();
+    } else {
+        echo json_encode(['success'=> false, 'error' => 'Cheating detected']);
+    }
+
+    $stmt = $pdo->prepare('UPDATE users SET cheating = 1 WHERE user_id = :user_id');
+    $stmt->execute(['user_id' => $user_id]);
+    exit();
+}
+
+// Récupérer le bonus en fonction des poules en couveuse
 $stmt = $pdo->prepare('SELECT eggs_after_decimal FROM scores WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $user_id]);
 $bonus = $stmt->fetchColumn();
 
-//Récupérer les 3 emplacements de couveuses
 $stmt = $pdo->prepare('SELECT * FROM incubators WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $user_id]);
 $incubators = $stmt->fetchAll();
 
-// Vérifier si une poule rousse (id = 1) est en couveuse
 $hasChickenInIncubator = false;
 foreach ($incubators as $incubator) {
     if ($incubator['chicken_id'] === 1) {
@@ -30,41 +76,21 @@ foreach ($incubators as $incubator) {
     }
 }
 
-// Si la poule rousse est en couveuse, récupérer le nombre de poules rousses possédées
 if ($hasChickenInIncubator) {
-    $stmt = $pdo->prepare('
-        SELECT count 
-        FROM user_chickens 
-        WHERE user_id = :user_id 
-        AND chicken_id = (SELECT id FROM chickens WHERE name = "Poule Rousse")
-    ');
+    $stmt = $pdo->prepare('SELECT count FROM user_chickens WHERE user_id = :user_id AND chicken_id = 1');
     $stmt->execute(['user_id' => $user_id]);
-    $chickenCount = $stmt->fetchColumn() ?: 0; // Si aucune poule rousse, on met 0
-
-    // Appliquer l'effet de la poule rousse
-    $bonus += $chickenCount * 0.5; // +1 œuf par clic par poule rousse
+    $chickenCount = $stmt->fetchColumn() ?: 0;
+    $bonus += $chickenCount * 0.5;
 }
-// Dans bonus, retirer tout ce qui est après le point et le mettre dans $bonus_after_decimal
+
 $bonus_after_decimal = $bonus - floor($bonus);
 $bonus = floor($bonus);
 
-// Calcul du total des œufs gagnés
 $increment = $base_increment + $bonus;
 
-// Mettre à jour les œufs dans la base
-$stmt = $pdo->prepare('UPDATE scores SET eggs = eggs + :increment WHERE user_id = :user_id');
-$stmt->execute(['increment' => $increment, 'user_id' => $user_id]);
+$stmt = $pdo->prepare('UPDATE scores SET eggs = eggs + :increment, eggs_last_day = eggs_last_day + :increment, eggs_earned_total = eggs_earned_total + :increment, eggs_after_decimal = :bonus_after_decimal WHERE user_id = :user_id');
+$stmt->execute(['increment' => $increment, 'bonus_after_decimal' => $bonus_after_decimal, 'user_id' => $user_id]);
 
-$stmt = $pdo->prepare('UPDATE scores SET eggs_last_day = eggs_last_day + :increment WHERE user_id = :user_id');
-$stmt->execute(['increment' => $increment, 'user_id' => $user_id]);
-
-$stmt = $pdo->prepare('UPDATE scores SET eggs_earned_total = eggs_earned_total + :increment WHERE user_id = :user_id');
-$stmt->execute(['increment' => $increment, 'user_id' => $user_id]);
-
-$stmt = $pdo->prepare('UPDATE scores SET eggs_after_decimal = :bonus_after_decimal WHERE user_id = :user_id');
-$stmt->execute(['bonus_after_decimal' => $bonus_after_decimal, 'user_id' => $user_id]);
-
-// Récupérer le nouveau score
 $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $user_id]);
 $newScore = $stmt->fetchColumn();

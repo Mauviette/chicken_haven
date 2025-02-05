@@ -67,7 +67,7 @@ echo '<!-- Barre de navigation -->
     <!-- Barre latérale droite -->
     <div class="sidebar-right">
     <ul>
-        <section class="incubator-container-side" style="display: flex; justify-content: center; align-items: center;">
+        <section class="incubator-container-side">
         ';
 
         for ($slot = 1; $slot <= 3; $slot++) {
@@ -95,11 +95,13 @@ echo '<!-- Barre de navigation -->
         </section>
 
         
-        <button id="loadPatchNotes">📜</button>
+        <div style="display: flex; justify-content: center;">
+            <button id="loadPatchNotes">📜</button>
+        </div>
         
         <!-- Conteneur des patch notes -->
         <div id="patchNotesContainer" class="patch-notes-container">
-            <button id="closePatchNotes">❌</button>
+            <!--button id="closePatchNotes">❌</button-->
             <div id="patchNotes"></div>
         </div>';
 
@@ -131,7 +133,7 @@ document.getElementById("loadPatchNotes").addEventListener("click", function () 
                 const patchNotesDiv = document.getElementById("patchNotes");
                 const container = document.getElementById("patchNotesContainer");
 
-                patchNotesDiv.innerHTML = ""; // Vider avant d'afficher
+                patchNotesDiv.innerHTML = "<h3 style='margin-left: 10px; color: black;'>Nouveautés & Mises à jour</h3>"; // Vider avant d'afficher
 
                 if (data.error) {
                     patchNotesDiv.innerHTML = `<p style="color: red;">${data.error}</p>`;
@@ -154,9 +156,9 @@ document.getElementById("loadPatchNotes").addEventListener("click", function () 
 });
 
 // Bouton pour fermer le menu
-document.getElementById("closePatchNotes").addEventListener("click", function () {
-    document.getElementById("patchNotesContainer").style.display = "none";
-});
+// document.getElementById("closePatchNotes").addEventListener("click", function () {
+//    document.getElementById("patchNotesContainer").style.display = "none";
+//});
 </script>
 
 

@@ -19,15 +19,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = $_SESSION['user_id'];
 
         try {
-            // Met à jour l'icône de profil de l'utilisateur dans la base de données
-            $stmt = $pdo->prepare('UPDATE users SET profile_icon_id = :icon_id WHERE id = :user_id');
-            $stmt->execute(['icon_id' => $icon_id, 'user_id' => $user_id]);
+            // Vérifie que l'utilisateur possède bien le chicken_id
+            $checkStmt = $pdo->prepare('SELECT COUNT(*) FROM user_chickens WHERE chicken_id = :icon_id AND user_id = :user_id');
+            $checkStmt->execute(['icon_id' => $icon_id, 'user_id' => $user_id]);
+            $chickenExists = $checkStmt->fetchColumn();
 
-            // Vérifie que la mise à jour a réussi
-            if ($stmt->rowCount() > 0) {
-                echo json_encode(['success' => true, 'message' => 'Image de profil mise à jour avec succès.']);
+            if ($chickenExists > 0) {
+                // Met à jour l'icône de profil de l'utilisateur dans la base de données
+                $stmt = $pdo->prepare('UPDATE users SET profile_icon_id = :icon_id WHERE id = :user_id');
+                $stmt->execute(['icon_id' => $icon_id, 'user_id' => $user_id]);
+
+                // Vérifie que la mise à jour a réussi
+                if ($stmt->rowCount() > 0) {
+                    echo json_encode(['success' => true, 'message' => 'Image de profil mise à jour avec succès.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Aucune mise à jour effectuée.']);
+                }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Aucune mise à jour effectuée.']);
+                echo json_encode(['success' => false, 'message' => 'L\'utilisateur ne possède pas ce poulet, tricheur.']);
             }
         } catch (PDOException $e) {
             // En cas d'erreur SQL

@@ -47,8 +47,6 @@ $currentScore = $stmt->fetchColumn();
     <script>
 
 
-let lastClickTime = 0;
-const clickCooldown = 67;
 let clicksPerSecond = 0;
 
 document.getElementById('egg').addEventListener('click', function(event) {
@@ -62,12 +60,6 @@ document.getElementById('egg').addEventListener('click', function(event) {
     if (clicksPerSecond > 20) {
         window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
     }
-    
-    const now = Date.now();
-    if (now - lastClickTime < clickCooldown) {
-        return; // Ignore le clic si trop rapide
-    }
-    lastClickTime = now;
 
     const egg = document.getElementById('egg');
 
@@ -117,6 +109,12 @@ document.getElementById('egg').addEventListener('click', function(event) {
 
                 // Animation du "+score"
                 clickAnimation(event, response.increment);
+            } else if (response.error === 'Click too fast') {
+                console.log('Vous cliquez trop vite !');
+            } else if (response.error === 'Cheating detected') {
+                alert('Triche détectée ! Si vous continuez à tricher, votre compte passera en mode tricheur. \nDans ce mode, vous ne compterez plus dans le podium et votre pseudo sera affiché en rouge.');
+            } else if (response.error === 'Cheating detected, already alerted') {
+                alert('Triche détectée ! Vous avez été marqué comme tricheur.');
             }
         }
     };

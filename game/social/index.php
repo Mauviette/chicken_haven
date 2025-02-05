@@ -23,6 +23,7 @@ $stmt = $pdo->prepare('
     SELECT u.username, u.displayname, u.id, s.eggs_earned_total 
     FROM users u 
     JOIN scores s ON u.id = s.user_id 
+    WHERE u.cheater = 0
     ORDER BY s.eggs_earned_total DESC 
     LIMIT 5
 ');
@@ -34,6 +35,7 @@ $stmt = $pdo->prepare('
     SELECT u.username, u.displayname, u.id, s.eggs_last_day
     FROM users u 
     JOIN scores s ON u.id = s.user_id 
+    WHERE u.cheater = 0
     ORDER BY s.eggs_last_day DESC 
     LIMIT 5
 ');

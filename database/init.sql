@@ -26,8 +26,12 @@ CREATE TABLE users (
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     profile_icon_id INT NOT NULL DEFAULT 1,
     FOREIGN KEY (profile_icon_id) REFERENCES chickens(id),
-    profile_background_color VARCHAR(7) NOT NULL
+    profile_background_color VARCHAR(7) NOT NULL,
+    nb_cheater_alerts INT NOT NULL DEFAULT 0,
+    cheater BOOLEAN NOT NULL DEFAULT 0
 );
+--ALTER TABLE users ADD COLUMN nb_cheater_alerts INT NOT NULL DEFAULT 0;
+--ALTER TABLE users ADD COLUMN cheater BOOLEAN NOT NULL DEFAULT 0;
 
 CREATE TABLE scores (
     id INT AUTO_INCREMENT PRIMARY KEY,
