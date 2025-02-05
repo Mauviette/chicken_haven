@@ -47,6 +47,8 @@ echo '<!-- Barre de navigation -->
         <span class="username">' . htmlspecialchars($_SESSION['displayname']) . '</span>
         </a>
     </div>
+
+
     <div class="session-section">
         <span>' . count($sessions) . ' en ligne</span>
     </div>
@@ -90,7 +92,16 @@ echo '<!-- Barre de navigation -->
         }
 
         echo '
-        </section>';
+        </section>
+
+        
+        <button id="loadPatchNotes">📜</button>
+        
+        <!-- Conteneur des patch notes -->
+        <div id="patchNotesContainer" class="patch-notes-container">
+            <button id="closePatchNotes">❌</button>
+            <div id="patchNotes"></div>
+        </div>';
 
 echo '
     </ul>
@@ -106,24 +117,48 @@ echo '
   
 
 ?>
-<script src="/scripts/eggs_per_second.js">
-<script src="/scripts/update_session.js">
+
 <script>
+document.getElementById("patchNotesContainer").style.display = "none";
 
-let devtoolsOpen = false;
 
-const detectDevTools = () => {
-    const start = performance.now();
-    debugger; // Provoque un arrêt si la console est ouverte
-    const end = performance.now();
+document.getElementById("loadPatchNotes").addEventListener("click", function () {
+    patchNotesContainer = document.getElementById("patchNotesContainer");
+    if (patchNotesContainer.style.display === "none") {
+        fetch("/scripts/get_patch_notes.php")
+            .then(response => response.json())
+            .then(data => {
+                const patchNotesDiv = document.getElementById("patchNotes");
+                const container = document.getElementById("patchNotesContainer");
 
-    if (end - start > 100) {
-        devtoolsOpen = true;
-        console.warn("Triche détectée !");
-        fetch("mark_as_cheater.php");
+                patchNotesDiv.innerHTML = ""; // Vider avant d'afficher
+
+                if (data.error) {
+                    patchNotesDiv.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                } else {
+                    data.forEach(note => {
+                        const noteElement = document.createElement("div");
+                        noteElement.classList.add("patch-note");
+                        noteElement.innerHTML = note.replace(/\n/g, "<br>");
+                        patchNotesDiv.appendChild(noteElement);
+                    });
+                }
+
+                container.style.display = "block";
+            })
+            .catch(error => console.error("Erreur :", error));
     }
-};
+    else {
+        patchNotesContainer.style.display = "none";
+    }
+});
 
-setInterval(detectDevTools, 3000);
+// Bouton pour fermer le menu
+document.getElementById("closePatchNotes").addEventListener("click", function () {
+    document.getElementById("patchNotesContainer").style.display = "none";
+});
 </script>
 
+
+<script src="/scripts/eggs_per_second.js"></script>
+<script src="/scripts/update_session.js"></script>

@@ -490,3 +490,47 @@ a.info-button {
   width: 40%;
   height: 40%;
 }
+
+/* Conteneur du patch notes */
+.patch-notes-container {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  max-height: 50px; /* Replié par défaut */
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #ccc;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 10px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+/* Header du patch notes (fait office de bouton) */
+#patchNotesHeader {
+  background: #444;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  border-top-left-radius: 10px;
+}
+
+/* Contenu du patch notes */
+#patchNotesContent {
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Style des notes */
+.patch-note {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+}

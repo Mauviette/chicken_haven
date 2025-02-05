@@ -86,8 +86,11 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div id="overlay"></div>
 
             <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
+
             <br>
             <a href="/scripts/logout.php">Se déconnecter</a><br><br>
+
+            
         </div>
     </div>
 
@@ -196,7 +199,10 @@ document.getElementById('editDisplayNameBtn').addEventListener('click', function
             });
         });
 
-        
+
+
+
+
     </script>
 </body>
 </html>
