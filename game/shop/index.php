@@ -47,8 +47,10 @@ $openable_eggs = $stmt->fetchAll();
             <div class="egg-item">
                 <img class="egg-display" src="/resources/images/eggs/<?php echo htmlspecialchars($egg['image_url']); ?>.png" alt="<?php echo htmlspecialchars($egg['name']); ?>">
                 <p><?php echo htmlspecialchars($egg['name']); ?></p>
-                <p>Prix : <?php echo $egg['price']; ?> œufs</p>
-                <button onclick="buyEgg(<?php echo $egg['id']; ?>, <?php echo $egg['price']; ?>)">Acheter</button>
+                <a href="#" class="info-button">
+                    <img src="/resources/images/more.png" alt="Infos">
+                </a>
+                <button onclick="buyEgg(<?php echo $egg['id']; ?>, <?php echo $egg['price']; ?>)"><?php echo $egg['price']; ?> œufs</button>
             </div>
         <?php endforeach; ?>
     </div>

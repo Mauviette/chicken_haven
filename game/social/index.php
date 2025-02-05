@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
+    header("Location: /index.php");
     exit();
 }
 
@@ -18,12 +18,12 @@ $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE user2_id = :user_id AN
 $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $nbPendingRequests = $stmt->fetchColumn();
 
-// Récupérer les meilleurs joueurs (avec le + de 'eggs' sur la table scores)
+// Récupérer les meilleurs joueurs (avec le + de 'eggs_earned_total' sur la table scores)
 $stmt = $pdo->prepare('
-    SELECT u.username, u.displayname, u.id, s.eggs 
+    SELECT u.username, u.displayname, u.id, s.eggs_earned_total 
     FROM users u 
     JOIN scores s ON u.id = s.user_id 
-    ORDER BY s.eggs DESC 
+    ORDER BY s.eggs_earned_total DESC 
     LIMIT 5
 ');
 $stmt->execute();
@@ -56,7 +56,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php require_once "../bars.php"; ?>
 
     <div class="main-container" style="
-            margin-top:25%;">
+            margin-top:50%;">
         <card class="form-container" style="
             max-height: 50000px;">
             <h1>Social</h1>
@@ -84,13 +84,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit">Rechercher</button>
             </form>
 
-
-            <div style ="  width: 90%;
-                margin: 20px auto;
-                padding: 20px;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                background-color: #fff;" >
+            <div class="friends-section">
 
             <h2>Podium (total d'oeufs)</h2>
 
@@ -104,7 +98,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
                                 <li style="background-color: #ccc;">
                                     <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
-                                    <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
+                                    <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_earned_total'])) ?> oeufs</p>
                                     <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                                     <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                                 </li>
@@ -125,7 +119,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     echo '<img src="/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">'; }
                                     else echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
                                     ?>
-                                    <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs'])) ?> oeufs</p>
+                                    <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_earned_total'])) ?> oeufs</p>
                                     <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
                                     <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
                                 </li>
@@ -134,7 +128,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <?php endforeach; ?>
                     <?php if (!$playerOnLeaderBoard) {?>
-                        <?php $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
+                        <?php $stmt = $pdo->prepare('SELECT eggs_earned_total FROM scores WHERE user_id = :user_id');
                         $stmt->execute(['user_id' => $currentUserId]);
                         $eggs = $stmt->fetchColumn();
                         ?>

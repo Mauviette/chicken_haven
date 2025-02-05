@@ -1,20 +1,7 @@
-let eggsPerSecond = 0; // Défini par le serveur
-
-// Fonction pour récupérer les œufs par seconde du serveur
-function fetchEggRate() {
-    fetch('/game/get_egg_rate.php') // Ce fichier renverra le eggsPerSecond en JSON
-        .then(response => response.json())
-        .then(data => {
-            eggsPerSecond = data.eggsPerSecond || 0;
-        });
-}
-
-// Fonction pour ajouter automatiquement des œufs chaque seconde
-function autoIncrementEggs() {
-    if (eggsPerSecond > 0) {
+(function() {
+    function autoIncrementEggs() {
         fetch('/game/auto_add_eggs.php', {
             method: 'POST',
-            body: JSON.stringify({ increment: eggsPerSecond }),
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => response.json())
@@ -29,24 +16,20 @@ function autoIncrementEggs() {
             }
         });
     }
-}
 
-// Mettre à jour les œufs toutes les secondes
-setInterval(autoIncrementEggs, 1000);
-
-// Charger le taux de production au début
-fetchEggRate();
+    setInterval(autoIncrementEggs, 1000);
+})();
 
 function checkForWhiteChicken() {
     return fetch('/game/chicken/check_white_chicken.php')
         .then(response => response.json())
-        .then(data => data.hasWhiteChicken);
+        .then(data => data.hasWhithicken);
 }
 
 function spawnWhiteEgg() {
     checkForWhiteChicken().then(hasWhiteChicken => {
         if (!hasWhiteChicken) return;
-        const chance = 1; // 5 % de chance par seconde
+        const chance = 0.05;
         if (Math.random() < chance) {
             const whiteEgg = document.createElement('img');
             whiteEgg.src = '/resources/images/eggs/white_egg.png';
@@ -58,8 +41,8 @@ function spawnWhiteEgg() {
             whiteEgg.style.opacity = '1';
 
             // Position aléatoire
-            whiteEgg.style.left = Math.random() * window.innerWidth + 'px';
-            whiteEgg.style.top = Math.random() * window.innerHeight + 'px';
+            whiteEgg.style.left = Math.random() * window.innerWidth * 0.95 + 'px';
+            whiteEgg.style.top = Math.random() * window.innerHeight * 0.95 + 'px';
 
             //orientation aléatoire
             whiteEgg.style.transform = `rotate(${Math.random() * 360}deg)`;
@@ -108,8 +91,9 @@ function spawnWhiteEgg() {
                             floatingText.remove();
                         }, 1000); // Correspond à la durée de l'animation
 
-                        whiteEgg.remove();
                     }
+                    
+                    whiteEgg.remove();
                 });
         });
 

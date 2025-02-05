@@ -158,11 +158,11 @@ a:hover {
 .sidebar ul, .sidebar-right ul {
   list-style: none;
   padding: 0;
-  margin-top: 25%;
+  margin-top: 50px;
 }
 
 .sidebar li, .sidebar-right li {
-  margin: 20% 0;
+  margin: 20px 0;
 }
 
 .sidebar a, .sidebar-right a {
@@ -321,6 +321,7 @@ a:hover {
 
 .incubator-container-side {
   margin-top: 25%;
+  display: flex;
 }
 
 .egg-shop {
@@ -457,4 +458,35 @@ animation: fall 2s ease-out forwards;
   border-radius: 50%;
   animation: egg-explosion 0.5s ease-out forwards;
   pointer-events: none;
+}
+
+@media screen and (max-width: 600px) {
+  .sidebar-right {
+    display: none;
+  }
+
+  .main-container {
+    max-width: 70%;
+    transform: translateX(15%);
+  }
+}
+
+.egg-shop button {
+  background-color: #585858;
+  color: white;
+  cursor: pointer;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+a.info-button {
+  width: 10%;
+  height: 10%;
+  cursor: pointer;
+}
+
+.info-button img {
+  width: 40%;
+  height: 40%;
 }

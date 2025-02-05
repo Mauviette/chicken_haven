@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
-    exit();
-}
-
 // Connexion à la base de données
 require_once '../../database/db_connect.php';
 
@@ -30,6 +25,7 @@ $currentScore = $stmt->fetchColumn();
 
     </style>
 </head>
+
 <body>
 
   <?php require_once "../bars.php"; ?>
@@ -49,7 +45,30 @@ $currentScore = $stmt->fetchColumn();
 
     <!-- Javascript -->
     <script>
+
+
+let lastClickTime = 0;
+const clickCooldown = 67;
+let clicksPerSecond = 0;
+
 document.getElementById('egg').addEventListener('click', function(event) {
+    // Calculer les clics par seconde
+    clicksPerSecond++;
+    setTimeout(() => {
+        clicksPerSecond--;
+    }, 1000);
+
+    //Si les clics par seconde sont supérieurs à 20, on redirige sur https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    if (clicksPerSecond > 20) {
+        window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+    }
+    
+    const now = Date.now();
+    if (now - lastClickTime < clickCooldown) {
+        return; // Ignore le clic si trop rapide
+    }
+    lastClickTime = now;
+
     const egg = document.getElementById('egg');
 
     // Ajouter la classe d'animation pour l'œuf
@@ -123,6 +142,7 @@ function clickAnimation(event, increment) {
         floatingText.remove();
     }, 1000); // Correspond à la durée de l'animation
 }
+
 
 
 </script>

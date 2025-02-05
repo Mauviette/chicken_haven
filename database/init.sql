@@ -111,7 +111,7 @@ INSERT INTO chickens (name, image_url, rarity, effect, multiplier) VALUES
 
 -- Oeuf argenté
 INSERT INTO openable_eggs (name, image_url, price, probability_common, probability_rare, probability_epic, probability_legendary) VALUES
-("Oeuf argenté", 'silver_egg', 100, 0.70, 0.22, 0.07, 0.0);
+("Oeuf argenté", 'silver_egg', 500, 0.70, 0.22, 0.08, 0.0);
 
 INSERT INTO egg_contents (egg_id, chicken_id, rarity) VALUES
 (1, 1, 'common'),

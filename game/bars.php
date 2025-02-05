@@ -106,8 +106,24 @@ echo '
   
 
 ?>
-<script src="/scripts/eggs_per_second.js"></script>
+<script src="/scripts/eggs_per_second.js">
 <script src="/scripts/update_session.js">
-
 <script>
+
+let devtoolsOpen = false;
+
+const detectDevTools = () => {
+    const start = performance.now();
+    debugger; // Provoque un arrêt si la console est ouverte
+    const end = performance.now();
+
+    if (end - start > 100) {
+        devtoolsOpen = true;
+        console.warn("Triche détectée !");
+        fetch("mark_as_cheater.php");
+    }
+};
+
+setInterval(detectDevTools, 3000);
 </script>
+

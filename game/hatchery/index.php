@@ -57,7 +57,7 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
     <?php require_once "../bars.php"; ?>
 
     
-    <div class="main-container" style="margin-top: 25%; width: 40%;">
+    <div class="main-container" style="margin-top: 25%; min-width: 40%;">
         <div class="form-container">
             <h1>🪹Couvoir</h1>
             <div class="nest-container">
@@ -82,7 +82,7 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                     <div class="nest-slot" style="position: relative;">
                         <img src="/resources/images/chicken_nest.png" alt="Nid <?php echo $slot; ?>" class="nest-image">
                             <?php if ($chicken): ?>
-                                <img src="/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>" class="chicken-on-nest" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; cursor: pointer;" onclick="showChickenDetails('<?php echo htmlspecialchars($chicken['name']); ?>', '/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png', '<?php echo htmlspecialchars($chicken['rarity']); ?>', '<?php echo htmlspecialchars($chicken['id']); ?>')">
+                                <img src="/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>" class="chicken-on-nest" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 10   0%; height: 100%; cursor: pointer;" onclick="showChickenDetails('<?php echo htmlspecialchars($chicken['name']); ?>', '/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png', '<?php echo htmlspecialchars($chicken['rarity']); ?>', '<?php echo htmlspecialchars($chicken['id']); ?>')">
                             <?php endif; ?>
                     </div>
                 
@@ -157,12 +157,16 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
         }
         .chicken-card {
             border: 2px solid green;
-            padding: 10px;
+            padding: 3%;
             text-align: center;
+            position: relative;
+            width: 20%;
+            height: 20%;
+            font-size: 100%
         }
         .chicken-card img {
-            width: 100px;
-            height: 100px;
+            width: 90%;
+            height: 90%;
         }
         .rarity-label {
             display: block;
@@ -200,19 +204,14 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
             width: 15px;
             height: 15px;
         }
-        .chicken-card {
-            position: relative;
-            width: 125px;
-            height: 200px;
-        }
         .nest-container {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
         .nest-container img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: 100%;
         }
         
         p.common {
@@ -452,15 +451,14 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
         chicken.style.top = '-20px';
         chicken.style.left = '50%';
         chicken.style.transform = 'translateX(-50%)';
-        chicken.style.width = '80px';
-        chicken.style.height = '80px';
+        chicken.style.width = '100%';
+        chicken.style.height = '100%';
         chicken.style.cursor = 'pointer';
         chicken.onclick = function() {
             showChickenDetails(chickenName, chickenImage, chickenRarity, chickenId);
         };
 
         nestSlot.appendChild(chicken);
-        fetchEggRate();
     }
 </script>
 

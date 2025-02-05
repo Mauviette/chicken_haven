@@ -1,3 +1,5 @@
+FAILLES 
 
-Demandes d'ami reçues
-Séparer le body du div
+- Injection de poules
+
+- Envoi de requêtes AJAX pour ajouter du score
