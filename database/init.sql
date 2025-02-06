@@ -28,10 +28,13 @@ CREATE TABLE users (
     FOREIGN KEY (profile_icon_id) REFERENCES chickens(id),
     profile_background_color VARCHAR(7) NOT NULL,
     nb_cheater_alerts INT NOT NULL DEFAULT 0,
-    cheater BOOLEAN NOT NULL DEFAULT 0
+    cheater BOOLEAN NOT NULL DEFAULT 0,
+    last_cheat_time TIMESTAMP
 );
 --ALTER TABLE users ADD COLUMN nb_cheater_alerts INT NOT NULL DEFAULT 0;
 --ALTER TABLE users ADD COLUMN cheater BOOLEAN NOT NULL DEFAULT 0;
+--ALTER TABLE users ADD COLUMN last_cheat_time TIMESTAMP;
+
 
 CREATE TABLE scores (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -122,3 +125,9 @@ INSERT INTO egg_contents (egg_id, chicken_id, rarity) VALUES
 (1, 2, 'common'),
 (1, 3, 'rare'),
 (1, 4, 'epic');
+
+CREATE EVENT reset_daily_scores
+ON SCHEDULE EVERY 1 DAY
+STARTS TIMESTAMP(CURRENT_DATE, '00:00:00')
+DO
+UPDATE scores SET eggs_last_day = 0;

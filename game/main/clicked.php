@@ -9,8 +9,8 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 $base_increment = 1;
-$clickCooldown = 160; // Temps minimum entre deux clics (ms)
-$maxClicksPerSecond = 20; // Limite des clics par seconde
+$clickCooldown = 10; // Temps minimum entre deux clics (ms)
+$maxClicksPerSecond = 10; // Limite des clics par seconde
 $now = microtime(true);
 
 // Vérifier si l'utilisateur spamme les clics
@@ -41,23 +41,40 @@ $stmt = $pdo->prepare('SELECT cheater FROM users WHERE id = :user_id');
 $stmt->execute(['user_id' => $user_id]);
 $cheating = $stmt->fetchColumn();
 
+// Vérifier si l'utilisateur est un tricheur
+if ($_SESSION['clicks_per_second'] > $maxClicksPerSecond && $cheating != 1) {
+    $stmt = $pdo->prepare('SELECT last_cheat_time FROM users WHERE id = :user_id');
+    $stmt->execute(['user_id' => $user_id]);
+    $lastCheatTime = $stmt->fetchColumn();
 
-if ($_SESSION['clicks_per_second'] > $maxClicksPerSecond && $cheating == 0) {
-    // Appeler /scripts/alert_cheating.php
+    $stmt = $pdo->query('SELECT NOW()');
+    $currentTime = $stmt->fetchColumn();
+
+    //Vériier si l'utilisateur a triché les 5 dernières secondes
+    if ($lastCheatTime && (strtotime($currentTime) - strtotime($lastCheatTime)) < 30) {
+        echo json_encode(['success' => false, 'error' => 'Cheating detected recently', 'lastCheatTime' => (strtotime($currentTime) - strtotime($lastCheatTime))]);
+        exit();
+    }
+
+    $stmt = $pdo->prepare('UPDATE users SET last_cheat_time = NOW() WHERE id = :user_id');
+    $stmt->execute(['user_id' => $user_id]);
+
     require_once '../../scripts/alert_cheating.php';
 
 
+    $stmt = $pdo->prepare('SELECT cheater FROM users WHERE id = :user_id');
+    $stmt->execute(['user_id' => $user_id]);
+    $cheating = $stmt->fetchColumn();
+
     if ($cheating == 1) {
         echo json_encode(['success'=> false, 'error' => 'Cheating detected, already alerted']);
-        exit();
     } else {
         echo json_encode(['success'=> false, 'error' => 'Cheating detected']);
     }
-
-    $stmt = $pdo->prepare('UPDATE users SET cheating = 1 WHERE user_id = :user_id');
-    $stmt->execute(['user_id' => $user_id]);
     exit();
 }
+
+
 
 // Récupérer le bonus en fonction des poules en couveuse
 $stmt = $pdo->prepare('SELECT eggs_after_decimal FROM scores WHERE user_id = :user_id');

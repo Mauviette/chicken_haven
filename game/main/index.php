@@ -35,7 +35,7 @@ $currentScore = $stmt->fetchColumn();
             <br><br>
 
             <div class="egg-container">
-                <div class="score" id="score"><?php echo number_format($currentScore); ?> œufs</div>
+                <div class="score main-score" id="score"><?php echo number_format($currentScore, 0, ',', ' '); ?> œufs</div>
                 <div class="egg" id="egg"></div>
             </div>
             <br><br>
@@ -105,16 +105,21 @@ document.getElementById('egg').addEventListener('click', function(event) {
             const response = JSON.parse(xhr.responseText);
             if (response.success) {
                 // Mettre à jour le score affiché
-                document.getElementById('score').textContent = new Intl.NumberFormat().format(response.newScore) + ' œufs';
+                const scoreElements = document.querySelectorAll('.score');
+                scoreElements.forEach(element => {
+                    element.textContent = new Intl.NumberFormat().format(response.newScore) + ' œufs';
+                });
 
                 // Animation du "+score"
                 clickAnimation(event, response.increment);
             } else if (response.error === 'Click too fast') {
                 console.log('Vous cliquez trop vite !');
             } else if (response.error === 'Cheating detected') {
-                alert('Triche détectée ! Si vous continuez à tricher, votre compte passera en mode tricheur. \nDans ce mode, vous ne compterez plus dans le podium et votre pseudo sera affiché en rouge.');
+                alert('Triche détectée ! Si vous continuez à tricher, votre compte passera en mode tricheur. \nDans ce mode, vous ne compterez plus dans le podium et une marque "tricheur" sera affichée sur votre profil.');
             } else if (response.error === 'Cheating detected, already alerted') {
                 alert('Triche détectée ! Vous avez été marqué comme tricheur.');
+            } else if (response.error === 'Cheating detected recently') {
+                console.log('Triche détectée récemment. Ignorée. ' + response.lastCheatTime);
             }
         }
     };

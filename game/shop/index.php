@@ -20,6 +20,11 @@ $stmt = $pdo->prepare('SELECT id, name, image_url, price, buyable, probability_c
 $stmt->execute();
 $openable_eggs = $stmt->fetchAll();
 
+// Récupérer les contenus des oeufs ouvrables (egg_id, chicken_id, rarity)
+$stmt = $pdo->prepare('SELECT * FROM egg_contents');
+$stmt->execute();
+$openable_eggs_content = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +49,7 @@ $openable_eggs = $stmt->fetchAll();
         
         <div class="egg-shop">
         <?php foreach ($openable_eggs as $egg): ?>
-            <div class="egg-item">
+            <div class="egg-item" egg-id="<?php echo $egg['id']; ?>">
                 <img class="egg-display" src="/resources/images/eggs/<?php echo htmlspecialchars($egg['image_url']); ?>.png" alt="<?php echo htmlspecialchars($egg['name']); ?>">
                 <p><?php echo htmlspecialchars($egg['name']); ?></p>
                 <a href="#" class="info-button">
@@ -55,9 +60,72 @@ $openable_eggs = $stmt->fetchAll();
         <?php endforeach; ?>
     </div>
     
+    <div id="chickenRewardList" class="popup">
+                <div class="popup-content">
+                    <div class="popup-header">
+                        <h2>Récompenses possibles</h2>
+                        <span class="close" onclick="closePopup()">&times;</span>
+                    </div>
+
+                    <div class="chicken-list"></div>
+                </div>
+            </div>
+
+    <div id="overlay"></div>
+
     </div>
 </div>
 </body>
 
 <script>
+    document.getElementById('overlay').addEventListener('click', closePopup);
+
+    document.querySelectorAll('.info-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            
+            const eggId = this.closest('.egg-item').getAttribute('egg-id');
+
+            fetch('/scripts/get_avalaible_chickens.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ egg_id: eggId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                data.chickens = Array.isArray(data.chickens) ? data.chickens : []; //Conversion en tableau
+                const popupBody = document.querySelector('.chicken-list');
+                popupBody.innerHTML = '';
+                if (data.success && Array.isArray(data.chickens)) {
+                    data.chickens.forEach(chicken => {
+                        const chickenElement = document.createElement('div');
+                        chickenElement.classList.add('chicken-item');
+                        chickenElement.classList.add(chicken.rarity);
+                        chickenElement.innerHTML = `
+                            <img src="/resources/images/chickens/${chicken.image_url}" alt="${chicken.name}">
+                            <p>${chicken.name}</p>
+                            <p>${chicken.probability}%</p>
+                        `;
+                        popupBody.appendChild(chickenElement);
+                    });
+                } else {
+                    popupBody.innerHTML = '<p>Aucune récompense disponible.</p>';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+            event.preventDefault();
+            const eggItem = this.closest('.egg-item');
+            const eggName = eggItem.querySelector('p').textContent;
+            const popupBody = document.querySelector('.chicken-list');
+            document.getElementById('chickenRewardList').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        });
+    });
+
+    function closePopup() {
+        document.getElementById('chickenRewardList').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
 </script>

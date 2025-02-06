@@ -41,6 +41,17 @@ $stmt = $pdo->prepare('
 ');
 $stmt->execute();
 $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+//Récupérer le total des oeufs de tous les joueurs
+$stmt = $pdo->prepare('SELECT SUM(eggs_earned_total) FROM scores');
+$stmt->execute();
+$total_eggs = $stmt->fetchColumn();
+
+//Récupérer le total des oeufs d'aujourd'hui de tous les joueurs
+$stmt = $pdo->prepare('SELECT SUM(eggs_last_day) FROM scores');
+$stmt->execute();
+$total_eggs_last_day = $stmt->fetchColumn();
+
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +69,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php require_once "../bars.php"; ?>
 
     <div class="main-container" style="
-            margin-top:50%;">
+            margin-top:15%;">
         <card class="form-container" style="
             max-height: 50000px;">
             <h1>Social</h1>
@@ -89,6 +100,7 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="friends-section">
 
             <h2>Podium (total d'oeufs)</h2>
+            <p>Total : <?php echo htmlspecialchars(number_format($total_eggs)); ?> oeufs</p>
 
             <?php if (!empty($best_players)): ?>
                 <ul class="friends-list" style="justify-content: space-between;">
@@ -152,7 +164,8 @@ $best_players_last_day = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
             <div class="friends-section">
-            <h2>Podium (gains des dernières 24 heures)</h2>
+            <h2>Podium (dernières 24 heures)</h2>
+            <p>Total : <?php echo htmlspecialchars(number_format($total_eggs_last_day)); ?> oeufs</p>
             <?php if (!empty($best_players_last_day)): ?>
                 <ul class="friends-list" style="justify-content: space-between;">
                     <?php $playerOnLeaderBoard = false; ?>

@@ -175,17 +175,18 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
         }
         
         .common {
-            border-color: #ccc;
+        border-color: #ccc;
         }
         .rare {
-            border-color: blue;
+        border-color: blue;
         }
         .epic {
-            border-color: purple;
+        border-color: purple;
         }
         .legendary {
-            border-color: orange;
+        border-color: orange;
         }
+
         .missing {
             border: 2px solid red;
             opacity: 0.5;
@@ -289,6 +290,9 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
         .chicken-card.legendary {
             background-color: #ffe5b4;
         }
+
+        
+
     </style>
 
 </body>

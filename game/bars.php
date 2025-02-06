@@ -38,6 +38,11 @@ $blackChickenCount = $stmt->fetchColumn();
 $eggsPerSecond = 0.1 * $blackChickenCount;
 
 
+// Récupérer le score actuel de l'utilisateur
+$stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$currentScore = $stmt->fetchColumn();
+
 
 echo '<!-- Barre de navigation -->
     <div class="navbar">
@@ -48,6 +53,15 @@ echo '<!-- Barre de navigation -->
         </a>
     </div>
 
+        <div class="patch-notes">
+            <button id="loadPatchNotes">📜</button>
+        </div>
+        
+        <!-- Conteneur des patch notes -->
+        <div id="patchNotesContainer" class="patch-notes-container">
+            <!--button id="closePatchNotes">❌</button-->
+            <div id="patchNotes"></div>
+        </div>
 
     <div class="session-section">
         <span>' . count($sessions) . ' en ligne</span>
@@ -94,16 +108,11 @@ echo '<!-- Barre de navigation -->
         echo '
         </section>
 
-        
-        <div style="display: flex; justify-content: center;">
-            <button id="loadPatchNotes">📜</button>
+        <div class="score side-score">
+            <span>' . number_format($currentScore, 0, ',', ' ') . ' œufs</span>
         </div>
         
-        <!-- Conteneur des patch notes -->
-        <div id="patchNotesContainer" class="patch-notes-container">
-            <!--button id="closePatchNotes">❌</button-->
-            <div id="patchNotes"></div>
-        </div>';
+';
 
 echo '
     </ul>

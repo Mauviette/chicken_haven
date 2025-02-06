@@ -26,4 +26,6 @@ if ($nb_cheater_alerts >= 3) {
 // Mettre à jour la base de données
 $stmt = $pdo->prepare('UPDATE users SET nb_cheater_alerts = :nb_cheater_alerts, cheater = :cheater WHERE id = :user_id');
 $stmt->execute(['nb_cheater_alerts' => $nb_cheater_alerts, 'cheater' => $cheater, 'user_id' => $user_id]);
+
+
 ?>

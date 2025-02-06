@@ -27,6 +27,22 @@ $stmt = $pdo->prepare('SELECT c.id, c.name, c.image_url, c.rarity
                        WHERE c.id = 1');
 $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Vérifier si l'utilisateur est un tricheur
+$stmt = $pdo->prepare('SELECT cheater FROM users WHERE id = :user_id');
+$stmt->execute(['user_id'=> $_SESSION['user_id']]);
+$cheater = $stmt->fetchColumn();
+
+//Obtenir le nombre de poules sur le jeu
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM chickens');
+$stmt->execute();
+$total_chickens = $stmt->fetchColumn();
+
+//Obtenir le nombre de poules de l'utilisateur (de la table user_chickens, vérifier par rapport à user_id)
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM user_chickens WHERE user_id = :user_id');
+$stmt->execute(['user_id'=> $_SESSION['user_id']]);
+$chickens_obtained = $stmt->fetchColumn();
+
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +87,7 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
+
             <div id="editDisplayNamePopup" class="popup">
                 <div class="popup-content">
                     <span class="close" id="closeEditNamePopup">&times;</span>
@@ -85,7 +102,9 @@ $profileIcons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div id="overlay"></div>
 
+            <?php if ($cheater) { echo '<p style="color: red;"><b>Tricheur</b></p>'; }?>
             <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
+            <p>Poules débloquées : <strong><?php echo $chickens_obtained; ?>/<?php echo $total_chickens; ?></strong></p>
 
             <br>
             <a href="/scripts/logout.php">Se déconnecter</a><br><br>

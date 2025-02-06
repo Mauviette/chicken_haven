@@ -48,6 +48,16 @@ if ($user) {
     $stmt = $pdo->prepare('SELECT cheater FROM users WHERE id = :user_id');
     $stmt->execute(['user_id'=> $targetUserId]);
     $cheater = $stmt->fetchColumn();
+    
+    //Obtenir le nombre de poules sur le jeu
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM chickens');
+    $stmt->execute();
+    $total_chickens = $stmt->fetchColumn();
+
+    //Obtenir le nombre de poules de l'utilisateur (de la table user_chickens, vérifier par rapport à user_id)
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM user_chickens WHERE user_id = :user_id');
+    $stmt->execute(['user_id'=> $targetUserId]);
+    $chickens_obtained = $stmt->fetchColumn();
 }
 ?>
 
@@ -69,7 +79,7 @@ if ($user) {
             <h1>Profil de <?php echo htmlspecialchars($displayname); ?></h1>
             <p><strong><?php echo htmlspecialchars($displayname); ?></strong> (<strong>@<?php echo htmlspecialchars($username); ?></strong>)</p>
             <img src="<?php echo getProfilePicture($targetUserId);?>" alt="Profil" class="profile-icon-big">
-            <p style="color: red;"><b>Tricheur</b></p>
+            <?php if ($cheater) { echo '<p style="color: red;"><b>Tricheur</b></p>'; }?>
 
             <br><br>
 
@@ -109,6 +119,7 @@ if ($user) {
             <br>
 
             <p>Nombre d'œufs : <strong><?php echo number_format($eggs); ?></strong></p>
+            <p>Poules débloquées : <strong><?php echo $chickens_obtained; ?>/<?php echo $total_chickens; ?></strong></p>
 
             <br><br>
         </div>
