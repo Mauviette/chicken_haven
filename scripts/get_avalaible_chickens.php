@@ -61,7 +61,7 @@ foreach ($chickens as &$chicken) {
     $rarity = $chicken['rarity'];
     if (isset($probabilities["probability_{$rarity}"]) && $rarityCounts[$rarity] > 0) {
         // On divise la probabilité totale par le nombre de poules de cette rareté
-        $chicken['probability'] = ($probabilities["probability_{$rarity}"] / $rarityCounts[$rarity]) * 100;
+        $chicken['probability'] = round((($probabilities["probability_{$rarity}"] / $rarityCounts[$rarity]) * 100), 2);
     } else {
         $chicken['probability'] = 0; // Sécurité
     }
