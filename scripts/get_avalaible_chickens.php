@@ -79,7 +79,7 @@ foreach ($chickens as &$chicken) {
 
     if (!$hasChicken) {
         $chicken['name'] = '???';
-        $chicken['image_url'] = 'mystery.png';
+        $chicken['image_url'] = 'mystery';
     }
 }
 

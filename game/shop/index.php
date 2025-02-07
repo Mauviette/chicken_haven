@@ -146,19 +146,18 @@ $openable_eggs_content = $stmt->fetchAll();
                     console.log('Poule trouvée : ' + data.chicken.name + ' (' + data.chicken.rarity + ')' + '. ID : ' + data.chicken.id);
 
                     const popupBody = document.querySelector('.chicken-list');
-                    popupBody.style =  "justify-content: center; display: flex;"
+                    popupBody.style = "justify-content: center; display: flex;";
                     popupBody.innerHTML = `
-                        <div class="chicken-item ${data.chicken.rarity}">
-                            <img src="/resources/images/chickens/${data.chicken.image_url}" alt="${data.chicken.name}">
-                            <p>${data.chicken.name}</p>
+                        <div class="egg-animation">
+                            <img src="/resources/images/eggs/${data.egg_image_url}.png" alt="Egg" class="egg-shake">
                         </div>
                     `;
-                    document.querySelector('#chickenRewardList .popup-header h2').textContent = 'Poule obtenue';
+                    document.querySelector('#chickenRewardList .popup-header h2').textContent = '';
+
                     document.getElementById('chickenRewardList').style.display = 'block';
                     document.getElementById('overlay').style.display = 'block';
-                    document.getElementById('chickenRewardList').style.display = 'block';
 
-
+                    
                     const scoreElements = document.querySelectorAll('.score');
                     scoreElements.forEach(element => {
                         element.textContent = new Intl.NumberFormat().format(data.newScore) + ' œufs';
@@ -166,6 +165,23 @@ $openable_eggs_content = $stmt->fetchAll();
 
                     const eggsIndicator = document.getElementById('eggs-indicator');
                     eggsIndicator.innerHTML = `Vous avez actuellement <strong>${data.newScore}</strong> œufs.`;
+
+                    setTimeout(() => {
+                        const eggAnimation = document.querySelector('.egg-animation');
+                        
+
+                        
+                        document.querySelector('#chickenRewardList .popup-header h2').textContent = 'Poule obtenue';
+                            popupBody.innerHTML = `
+                                <div class="chicken-item ${data.chicken.rarity}">
+                                    <img src="/resources/images/chickens/${data.chicken.image_url}.png" alt="${data.chicken.name}">
+                                    <p>${data.chicken.name}</p>
+                                </div>
+                            `;
+                    }, 2000); // Adjust the timing as needed
+
+                    
+                        
                 } else {
                     alert(data.error + "\nDétails : " + data.details);
                 }
@@ -175,3 +191,32 @@ $openable_eggs_content = $stmt->fetchAll();
         });
     });
 </script>
+
+<style>
+    .egg-animation {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        width: 200px;
+        margin: 0 auto;
+    }
+
+    .egg-shake {
+        animation: shake 0.8s;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        30% { transform: translate(3px, 2px) rotate(0deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        70% { transform: translate(3px, 1px) rotate(-1deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        90% { transform: translate(1px, 2px) rotate(0deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }

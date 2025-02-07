@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 
 // Définir le chemin du fichier
-$file_path = __DIR__ . "\..\data\patch_notes.data";
+$file_path = __DIR__ . "/../data/patch_notes.data";
 
 // Vérifier si le fichier existe
 if (!file_exists($file_path)) {

@@ -116,6 +116,11 @@ try {
         $stmt->execute(['user_id' => $user_id, 'chicken_id' => $selected_chicken['id']]);
     }
 
+    //Obtenir l'url de l'oeuf ouvert
+    $stmt = $pdo->prepare("SELECT image_url FROM openable_eggs WHERE id = :egg_id");
+    $stmt->execute(['egg_id' => $egg_id]);
+    $egg_image_url = $stmt->fetchColumn();
+
     $pdo->commit();
 
     echo json_encode([
@@ -126,7 +131,8 @@ try {
             'image_url' => $selected_chicken['image_url'],
             'rarity' => $selected_chicken['rarity']
         ],
-        'newScore' => $current_eggs - $egg_price
+        'newScore' => $current_eggs - $egg_price,
+        'egg_image_url' => $egg_image_url
     ]);
 } catch (Exception $e) {
     $pdo->rollBack();

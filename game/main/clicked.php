@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $base_increment = 1;
 $clickCooldown = 10; // Temps minimum entre deux clics (ms)
-$maxClicksPerSecond = 10; // Limite des clics par seconde
+$maxClicksPerSecond = 19; // Limite des clics par seconde
 $now = microtime(true);
 
 // Vérifier si l'utilisateur spamme les clics
@@ -97,7 +97,7 @@ if ($hasChickenInIncubator) {
     $stmt = $pdo->prepare('SELECT count FROM user_chickens WHERE user_id = :user_id AND chicken_id = 1');
     $stmt->execute(['user_id' => $user_id]);
     $chickenCount = $stmt->fetchColumn() ?: 0;
-    $bonus += $chickenCount * 0.5;
+    $bonus += $chickenCount * 0.1;
 }
 
 $bonus_after_decimal = $bonus - floor($bonus);

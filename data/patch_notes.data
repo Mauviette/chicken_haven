@@ -1,7 +1,7 @@
 Affichage du nombre de poules obtenues sur le profil.
 Le podium des dernières 24h se réinitialise correctement.
 Un total est affiché sur le podium.
-Onglet "info" disponible dans le marché.
+Marché fonctionnel, des animations seront bientot ajoutées, pas de panique
 ---
 Ajouté l'onglet des patch notes!
 Reglé des bugs qui créaient des failles de sécurité et réinitialisation des oeufs générés par ces failles.

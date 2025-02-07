@@ -13,6 +13,8 @@
                         element.textContent = new Intl.NumberFormat().format(data.newScore) + ' œufs';
                     });
                 }
+            } else {
+                console.error('Oeufs ajoutés : ' + data.increment);
             }
         });
     }
@@ -27,6 +29,7 @@ function checkForWhiteChicken() {
 }
 
 function spawnWhiteEgg() {
+    console.log('Oeuf blanc apparaît');
     checkForWhiteChicken().then(hasWhiteChicken => {
         if (!hasWhiteChicken) return;
         const chance = 0.05;

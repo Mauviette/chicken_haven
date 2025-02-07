@@ -12,29 +12,47 @@ $eggsPerSecond = 0;
 
 // Poule noire
 $stmt = $pdo->prepare("
-    SELECT COUNT(*) FROM incubators 
-    INNER JOIN chickens ON incubators.chicken_id = chickens.id
-    WHERE incubators.user_id = :user_id AND chickens.name = 'Poule noire'
+    SELECT SUM(user_chickens.count) FROM user_chickens
+    INNER JOIN chickens ON user_chickens.chicken_id = chickens.id
+    LEFT JOIN incubators ON user_chickens.chicken_id = incubators.chicken_id AND user_chickens.user_id = incubators.user_id
+    WHERE user_chickens.user_id = :user_id AND chickens.name = 'Poule noire' AND incubators.chicken_id IS NOT NULL
 ");
 $stmt->execute(['user_id' => $user_id]);
 $blackChickenCount = $stmt->fetchColumn();
 
-$eggsPerSecond += 0.1 * $blackChickenCount;
+$stmt = $pdo->prepare("
+    SELECT multiplier FROM chickens
+    WHERE name = 'Poule noire'
+");
+$stmt->execute();
+$blackChickenMultiplier = $stmt->fetchColumn();
+
+$eggsPerSecond += $blackChickenMultiplier * $blackChickenCount;
 
 // Canard
 $stmt = $pdo->prepare("
-    SELECT COUNT(*) FROM incubators 
-    INNER JOIN chickens ON incubators.chicken_id = chickens.id
-    WHERE incubators.user_id = :user_id AND chickens.name = 'Canard'
+    SELECT SUM(user_chickens.count) FROM user_chickens
+    INNER JOIN chickens ON user_chickens.chicken_id = chickens.id
+    LEFT JOIN incubators ON user_chickens.chicken_id = incubators.chicken_id AND user_chickens.user_id = incubators.user_id
+    WHERE user_chickens.user_id = :user_id AND chickens.name = 'Canard' AND incubators.chicken_id IS NOT NULL
 ");
 $stmt->execute(['user_id' => $user_id]);
 $duckCount = $stmt->fetchColumn();
 
-$eggsPerSecond += 1 * $duckCount;
+$stmt = $pdo->prepare("
+    SELECT multiplier FROM chickens
+    WHERE name = 'Canard'
+");
+$stmt->execute();
+$duckMultiplier = $stmt->fetchColumn();
+
+$eggsPerSecond += $duckCount * $duckMultiplier;
 
 
 
 $increment = $eggsPerSecond;
+//echo json_encode(['success' => false, 'increment' => $increment]);
+//exit();
 
 //Ajouter eggs_after_decimal à increment
 $stmt = $pdo->prepare('SELECT eggs_after_decimal FROM scores WHERE user_id = :user_id');

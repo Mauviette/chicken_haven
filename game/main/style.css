@@ -584,3 +584,8 @@ a.info-button {
   justify-content: center; 
   margin-left: 85%;
 }
+
+.egg-animation img {
+  width: 100%;
+  height: 100%;
+}
