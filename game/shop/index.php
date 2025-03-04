@@ -1,4 +1,6 @@
 <?php
+require_once '../../scripts/check_eggs_prices.php';
+
 session_start();
 require_once '../../database/db_connect.php';
 
@@ -103,10 +105,12 @@ $openable_eggs_content = $stmt->fetchAll();
                         const chickenElement = document.createElement('div');
                         chickenElement.classList.add('chicken-item');
                         chickenElement.classList.add(chicken.rarity);
+                        rarityString = rarityToString(chicken.rarity);
                         chickenElement.innerHTML = `
                             <img src="/resources/images/chickens/${chicken.image_url}" alt="${chicken.name}">
                             <p>${chicken.name}</p>
                             <p>${chicken.probability}%</p>
+                            <b><p class="${chicken.rarity}">${rarityString}</p></b>
                         `;
                         popupBody.appendChild(chickenElement);
                     });
@@ -127,7 +131,10 @@ $openable_eggs_content = $stmt->fetchAll();
 
     function closePopup() {
         document.getElementById('chickenRewardList').style.display = 'none';
+        document.getElementById('chickenRewardList').style.height = 'auto';
+        document.getElementById('chickenRewardList').style.backgroundColor = 'rgba(255, 255, 255, 1)';
         document.getElementById('overlay').style.display = 'none';
+
     }
 
     document.querySelectorAll('.buy-egg').forEach(button => {
@@ -155,8 +162,11 @@ $openable_eggs_content = $stmt->fetchAll();
                     document.querySelector('#chickenRewardList .popup-header h2').textContent = '';
 
                     document.getElementById('chickenRewardList').style.display = 'block';
+                    document.getElementById('chickenRewardList').style.height = '30%';
+                    document.getElementById('chickenRewardList').style.backgroundColor = 'transparent';
                     document.getElementById('overlay').style.display = 'block';
-
+                    document.getElementById('chickenRewardList').style.width = '50%';
+                    
                     
                     const scoreElements = document.querySelectorAll('.score');
                     scoreElements.forEach(element => {
@@ -168,16 +178,67 @@ $openable_eggs_content = $stmt->fetchAll();
 
                     setTimeout(() => {
                         const eggAnimation = document.querySelector('.egg-animation');
-                        
 
                         
+                        // Créer plusieurs fragments d'œuf
+                        for (let i = 0; i < 18; i++) {
+                            const fragment = document.createElement('div');
+                            fragment.classList.add('egg-fragment-open');
+                            //fragment.style.backgroundImage = `url('/resources/images/eggs/${data.egg_image_url}_fragment.png')`;
+                            fragment.style.backgroundImage = `url('/resources/images/feather.png')`;
+
+
+                            // Générer une direction aléatoire pour le fragment
+                            const randomX = Math.random() * 2 - 1; // Valeur aléatoire entre -1 et 1
+                            const randomRotation = Math.floor(Math.random() * 360) + 'deg'; // Rotation initiale aléatoire
+
+                            // Appliquer les variables CSS personnalisées
+                            fragment.style.setProperty('--random-x', randomX);
+                            fragment.style.setProperty('--start-rotation', randomRotation);
+
+                            // Positionner le fragment à l'endroit du clic
+                            const randomOffsetX = (Math.random() - 0.5) * 250;
+                            const randomOffsetY = (Math.random() - 0.5) * 250;
+                            fragment.style.left = `calc(50% + ${randomOffsetX}px)`;
+                            fragment.style.top = `calc(50% + ${randomOffsetY}px)`;
+
+                            //Déterminer une taille aléatoire
+                            const randomSize = Math.floor(Math.random() * 30) + 30; // Valeur aléatoire entre 50 et 100
+                            fragment.style.width = `${randomSize}px`;
+                            fragment.style.height = `${randomSize}px`;
+
+                            // Ajouter le fragment au body
+                            document.body.appendChild(fragment);
+
+                            // Supprimer le fragment après la fin de l'animation
+                            fragment.addEventListener('animationend', () => {
+                                fragment.remove();
+                            });
+                        }
+                        
+                        document.getElementById('chickenRewardList').style.backgroundColor = 'rgba(255, 255, 255, 1)';
+                        document.getElementById('chickenRewardList').style.height = 'auto';
+                        document.getElementById('chickenRewardList').style.width = '20%';
+
+                        rarityString = rarityToString(data.chicken.rarity);
                         document.querySelector('#chickenRewardList .popup-header h2').textContent = 'Poule obtenue';
                             popupBody.innerHTML = `
                                 <div class="chicken-item ${data.chicken.rarity}">
                                     <img src="/resources/images/chickens/${data.chicken.image_url}.png" alt="${data.chicken.name}">
                                     <p>${data.chicken.name}</p>
+                                    <b><p class="${data.chicken.rarity}">${rarityString}</p></b>
                                 </div>
                             `;
+
+
+                        // Rendre le chickenRewardList invisible
+                        document.getElementById('chickenRewardList').style.opacity = '0';
+
+                        // Attendre un court instant avant de le rendre visible
+                        setTimeout(() => {
+                            document.getElementById('chickenRewardList').style.opacity = '1';
+                            document.getElementById('chickenRewardList').style.transition = 'opacity 0.5s ease-in-out';
+                        }, 50);
                     }, 2000); // Adjust the timing as needed
 
                     
@@ -190,6 +251,16 @@ $openable_eggs_content = $stmt->fetchAll();
             event.preventDefault();
         });
     });
+
+function rarityToString(rarity) {
+    switch (rarity) {
+        case "common" : return "Commun";
+        case "rare" : return "Rare";
+        case "epic" : return "Épique";
+        case "legendary" : return "Légendaire";
+    }
+}
+
 </script>
 
 <style>
@@ -220,3 +291,4 @@ $openable_eggs_content = $stmt->fetchAll();
         90% { transform: translate(1px, 2px) rotate(0deg); }
         100% { transform: translate(1px, -2px) rotate(-1deg); }
     }
+</style>

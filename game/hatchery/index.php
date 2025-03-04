@@ -57,9 +57,10 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
     <?php require_once "../bars.php"; ?>
 
     
-    <div class="main-container" style="margin-top: 25%; min-width: 40%;">
+    <div class="main-container" style="min-width: 40%;">
         <div class="form-container">
             <h1>🪹Couvoir</h1>
+            <br>
             <div class="nest-container">
                 <?php
                 // Récupérer les poules dans les incubateurs
@@ -73,7 +74,9 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                 $stmt->execute(['user_id' => $user_id]);
                 $incubatorChickens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                for ($slot = 1; $slot <= 3; $slot++):
+                $max_slots = 3;
+
+                for ($slot = 1; $slot <= $max_slots; $slot++):
                     $chicken = array_filter($incubatorChickens, function($incubatorChicken) use ($slot) {
                         return $incubatorChicken['slot_number'] == $slot;
                     });
@@ -82,7 +85,7 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
                     <div class="nest-slot" style="position: relative;">
                         <img src="/resources/images/chicken_nest.png" alt="Nid <?php echo $slot; ?>" class="nest-image">
                             <?php if ($chicken): ?>
-                                <img src="/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>" class="chicken-on-nest" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 10   0%; height: 100%; cursor: pointer;" onclick="showChickenDetails('<?php echo htmlspecialchars($chicken['name']); ?>', '/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png', '<?php echo htmlspecialchars($chicken['rarity']); ?>', '<?php echo htmlspecialchars($chicken['id']); ?>')">
+                                <img src="/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png" alt="<?php echo htmlspecialchars($chicken['name']); ?>" class="chicken-on-nest" onclick="showChickenDetails('<?php echo htmlspecialchars($chicken['name']); ?>', '/resources/images/chickens/<?php echo htmlspecialchars($chicken['image_url']); ?>.png', '<?php echo htmlspecialchars($chicken['rarity']); ?>', '<?php echo htmlspecialchars($chicken['id']); ?>')">
                             <?php endif; ?>
                     </div>
                 
@@ -215,18 +218,6 @@ function updateIncubator($user_id, $chicken_id, $slot_number) {
             height: 100%;
         }
         
-        p.common {
-            color: #ccc;
-        }
-        p.rare {
-            color: blue;
-        }
-        p.epic {
-            color: purple;
-        }
-        p.legendary {
-            color: orange;
-        }
 
         .tooltip {
         position: relative;

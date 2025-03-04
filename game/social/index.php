@@ -68,8 +68,7 @@ $total_eggs_last_day = $stmt->fetchColumn();
 
     <?php require_once "../bars.php"; ?>
 
-    <div class="main-container" style="
-            margin-top:15%;">
+    <div class="main-container">
         <card class="form-container" style="
             max-height: 50000px;">
             <h1>Social</h1>

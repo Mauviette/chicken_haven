@@ -56,7 +56,6 @@ document.getElementById('egg').addEventListener('click', function(event) {
         clicksPerSecond--;
     }, 1000);
 
-    //Si les clics par seconde sont supérieurs à 20, on redirige sur https://www.youtube.com/watch?v=dQw4w9WgXcQ
     if (clicksPerSecond > 20) {
         window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
     }

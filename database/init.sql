@@ -85,6 +85,7 @@ CREATE TABLE openable_eggs (
     image_url VARCHAR(255) NOT NULL,
     buyable BOOLEAN NOT NULL DEFAULT 1,
     price INT NOT NULL DEFAULT 0,
+    price_mult FLOAT NOT NULL DEFAULT 1.1,
     limited BOOLEAN NOT NULL DEFAULT 0,
     start_date TIMESTAMP,
     end_date TIMESTAMP,
@@ -93,6 +94,7 @@ CREATE TABLE openable_eggs (
     probability_epic FLOAT NOT NULL DEFAULT 0.07,
     probability_legendary FLOAT NOT NULL DEFAULT 0.01
 );
+--ALTER TABLE openable_eggs ADD COLUMN price_mult FLOAT NOT NULL DEFAULT 1.1;
 
 CREATE TABLE egg_contents (
     egg_id INT NOT NULL,
@@ -102,6 +104,17 @@ CREATE TABLE egg_contents (
     FOREIGN KEY (chicken_id) REFERENCES chickens(id) ON DELETE CASCADE,
     rarity ENUM('common', 'rare', 'epic', 'legendary') NOT NULL
 );
+
+
+CREATE TABLE player_egg_price (
+    user_id INT NOT NULL,
+    egg_id INT NOT NULL,
+    price INT NOT NULL,
+    PRIMARY KEY (user_id, egg_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (egg_id) REFERENCES openable_eggs(id) ON DELETE CASCADE
+);
+
 
 -- Exemple d'ajout d'une poule à un utilisateur
 --INSERT INTO user_chickens (user_id, chicken_id) VALUES (1, 1) ON DUPLICATE KEY UPDATE count = count + 1;
@@ -117,8 +130,9 @@ INSERT INTO chickens (name, image_url, rarity, effect, multiplier) VALUES
 /* Ajout des oeufs */
 
 -- Oeuf argenté
-INSERT INTO openable_eggs (name, image_url, price, probability_common, probability_rare, probability_epic, probability_legendary) VALUES
-("Oeuf argenté", 'silver_egg', 500, 0.70, 0.22, 0.08, 0.0);
+INSERT INTO openable_eggs (name, image_url, price, price_mult, probability_common, probability_rare, probability_epic, probability_legendary) VALUES
+("Oeuf argenté", 'silver_egg', 500, 1.1, 0.70, 0.22, 0.08, 0.0);
+--UPDATE openable_eggs SET price_mult = 1.1 WHERE name = 'Oeuf argenté';
 
 INSERT INTO egg_contents (egg_id, chicken_id, rarity) VALUES
 (1, 1, 'common'),
@@ -126,6 +140,12 @@ INSERT INTO egg_contents (egg_id, chicken_id, rarity) VALUES
 (1, 3, 'rare'),
 (1, 4, 'epic');
 
+
+
+
+
+
+/* Evenements */
 CREATE EVENT reset_daily_scores
 ON SCHEDULE EVERY 1 DAY
 STARTS TIMESTAMP(CURRENT_DATE, '00:00:00')
