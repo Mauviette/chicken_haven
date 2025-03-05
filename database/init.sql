@@ -29,11 +29,13 @@ CREATE TABLE users (
     profile_background_color VARCHAR(7) NOT NULL,
     nb_cheater_alerts INT NOT NULL DEFAULT 0,
     cheater BOOLEAN NOT NULL DEFAULT 0,
-    last_cheat_time TIMESTAMP
+    last_cheat_time TIMESTAMP,
+    last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 --ALTER TABLE users ADD COLUMN nb_cheater_alerts INT NOT NULL DEFAULT 0;
 --ALTER TABLE users ADD COLUMN cheater BOOLEAN NOT NULL DEFAULT 0;
 --ALTER TABLE users ADD COLUMN last_cheat_time TIMESTAMP;
+--ALTER TABLE users ADD COLUMN last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 
 CREATE TABLE scores (
