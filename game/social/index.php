@@ -96,10 +96,73 @@ $total_eggs_last_day = $stmt->fetchColumn();
             <button type="submit">Rechercher</button>
             </form>
 
-            <?php
-            afficherPodium('Podium (total d\'oeufs)', $total_eggs, $best_players, $currentUserId, $pdo);
-            afficherPodium('Podium (dernières 24 heures)', $total_eggs_last_day, $best_players_last_day, $currentUserId, $pdo);
-            ?>
+            <div class="friends-section">
+
+            <h2>Podium (total d'oeufs)</h2>
+            <p>Total : <?php echo htmlspecialchars(number_format($total_eggs)); ?> oeufs</p>
+
+            <?php if (!empty($best_players)): ?>
+                <ul class="friends-list" style="justify-content: space-between;">
+                    <?php $playerOnLeaderBoard = false;
+                        foreach ($best_players as $player): 
+                            if ($player['id'] == $currentUserId):
+                            $playerOnLeaderBoard = true; ?>
+
+                            <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>" style="no-link">
+                                <li style="background-color: #ccc;">
+                                    <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+                                    <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_earned_total'])) ?> oeufs</p>
+                                    <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                                    <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                                </li>
+                            </a>
+
+                        <?php else: ?>
+
+                            <?php //Vérifie si l'utilisateur est en ami
+                            $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE ((user1_id = :current_user_id AND user2_id = :player_id) OR (user1_id = :player_id AND user2_id = :current_user_id)) AND accepted = 1');
+                            $stmt->execute(['current_user_id' => $currentUserId, 'player_id' => $player['id']]);
+                            $isFriend = $stmt->fetchColumn() > 0;
+
+                            ?>
+
+                            <a href="player.php?username=<?php echo htmlspecialchars($player['username']);?>">
+                                <li>
+                                    <?php if ($isFriend) {
+                                    echo '<img src="/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">'; }
+                                    else echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
+                                    ?>
+                                    <p style="flex: 1;"><?php echo htmlspecialchars(number_format($player['eggs_earned_total'])) ?> oeufs</p>
+                                    <img src="<?php echo getProfilePicture($player['id']);?>" alt="Icone joueur" class="player-icon">
+                                    <strong style="flex: 1;"><?php echo htmlspecialchars($player['displayname']); ?></strong>
+                                </li>
+                            </a>
+                        <?php endif; ?>
+
+                    <?php endforeach; ?>
+                    <?php if (!$playerOnLeaderBoard) {?>
+                        <?php $stmt = $pdo->prepare('SELECT eggs_earned_total FROM scores WHERE user_id = :user_id');
+                        $stmt->execute(['user_id' => $currentUserId]);
+                        $eggs = $stmt->fetchColumn();
+                        ?>
+                            <a href="player.php?username=<?php echo htmlspecialchars($_SESSION['username']);?>" style="no-link">
+
+                                <li style="background-color: #ccc;">
+                                <?php echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">'; ?>
+                                <p style="flex: 1;"><?php echo htmlspecialchars(number_format($eggs)) ?> oeufs</p>
+                                <img src="<?php echo getProfilePicture($_SESSION['user_id']);?>" alt="Icone joueur" class="player-icon">
+                                <strong style="flex: 1;"><?php echo htmlspecialchars($_SESSION['displayname']); ?></strong>
+                                </li>
+                            </a>
+                    <?php } ?>
+                </ul>
+            <?php else: ?>
+                <p>Pourquoi c'est aussi vide!?</p>
+            <?php endif; ?>
+            </div>
+
+
+            
     </div>
 </div>
 
@@ -108,62 +171,7 @@ $total_eggs_last_day = $stmt->fetchColumn();
 
 
 <style>
+
+
+
 </style>
-
-<?php
-
-function afficherPodium($title, $total_eggs, $players, $currentUserId, $pdo) {
-    echo '<div class="friends-section">';
-    echo '<h2>' . htmlspecialchars($title) . '</h2>';
-    echo '<p>Total : ' . htmlspecialchars(number_format($total_eggs)) . ' oeufs</p>';
-    if (!empty($players)) {
-        echo '<ul class="friends-list" style="justify-content: space-between;">';
-        $playerOnLeaderBoard = false;
-        foreach ($players as $player) {
-            if ($player['id'] == $currentUserId) {
-                $playerOnLeaderBoard = true;
-                echo '<a href="player.php?username=' . htmlspecialchars($player['username']) . '" style="no-link">';
-                echo '<li style="background-color: #ccc;">';
-                echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
-                echo '<p style="flex: 1;">' . htmlspecialchars(number_format($player['eggs'])) . ' oeufs</p>';
-                echo '<img src="' . getProfilePicture($player['id']) . '" alt="Icone joueur" class="player-icon">';
-                echo '<strong style="flex: 1;">' . htmlspecialchars($player['displayname']) . '</strong>';
-                echo '</li>';
-                echo '</a>';
-            } else {
-                $stmt = $pdo->prepare('SELECT COUNT(*) FROM friends WHERE ((user1_id = :current_user_id AND user2_id = :player_id) OR (user1_id = :player_id AND user2_id = :current_user_id)) AND accepted = 1');
-                $stmt->execute(['current_user_id' => $currentUserId, 'player_id' => $player['id']]);
-                $isFriend = $stmt->fetchColumn() > 0;
-                echo '<a href="player.php?username=' . htmlspecialchars($player['username']) . '">';
-                echo '<li>';
-                if ($isFriend) {
-                    echo '<img src="/resources/images/friends.png" alt="Friend Icon" class="friend-icon" style="width: 4%; height: 4%;">';
-                } else {
-                    echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
-                }
-                echo '<p style="flex: 1;">' . htmlspecialchars(number_format($player['eggs'])) . ' oeufs</p>';
-                echo '<img src="' . getProfilePicture($player['id']) . '" alt="Icone joueur" class="player-icon">';
-                echo '<strong style="flex: 1;">' . htmlspecialchars($player['displayname']) . '</strong>';
-                echo '</li>';
-                echo '</a>';
-            }
-        }
-        if (!$playerOnLeaderBoard) {
-            $stmt = $pdo->prepare('SELECT eggs FROM scores WHERE user_id = :user_id');
-            $stmt->execute(['user_id' => $currentUserId]);
-            $eggs = $stmt->fetchColumn();
-            echo '<a href="player.php?username=' . htmlspecialchars($_SESSION['username']) . '" style="no-link">';
-            echo '<li style="background-color: #ccc;">';
-            echo '<img src="/resources/images/nothing.png" alt="Nothing Icon" class="friend-icon" style="width: 4%; height: 4%;">';
-            echo '<p style="flex: 1;">' . htmlspecialchars(number_format($eggs)) . ' oeufs</p>';
-            echo '<img src="' . getProfilePicture($_SESSION['user_id']) . '" alt="Icone joueur" class="player-icon">';
-            echo '<strong style="flex: 1;">' . htmlspecialchars($_SESSION['displayname']) . '</strong>';
-            echo '</li>';
-            echo '</a>';
-        }
-        echo '</ul>';
-    } else {
-        echo '<p>Pourquoi c\'est aussi vide!?</p>';
-    }
-    echo '</div>';
-}
